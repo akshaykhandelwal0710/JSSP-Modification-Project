@@ -1,0 +1,1575 @@
+GAMS 40.1.1  23eb37fb Aug 16, 2022          WEX-WEI x86 64bit/MS Windows - 12/05/22 19:10:47 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  Set i/
+INCLUDE    D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\set1.inc
+   4  * -----------------------------------------------------
+   5  * XLS2GMS 2.8      40.1.1 23eb37fb Aug 16, 2022          VS8 x86 32bit/MS Window
+   6  * Erwin Kalvelagen, GAMS Development Corp.
+   7  * -----------------------------------------------------
+   8  * Application: Microsoft Excel
+   9  * Version:     16.0
+  10  * Workbook:    D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\test_data.xlsx
+  11  * Sheet:       Sheet6
+  12  * Range:       $B$6:$B$17
+  13  * -----------------------------------------------------
+  14  1
+  15  2
+  16  3
+  17  4
+  18  5
+  19  6
+  20  7
+  21  8
+  22  9
+  23  10
+  24  11
+  25  12
+  26  * -----------------------------------------------------
+  27  /
+  28  j /
+INCLUDE    D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\set2.inc
+  31  * -----------------------------------------------------
+  32  * XLS2GMS 2.8      40.1.1 23eb37fb Aug 16, 2022          VS8 x86 32bit/MS Window
+  33  * Erwin Kalvelagen, GAMS Development Corp.
+  34  * -----------------------------------------------------
+  35  * Application: Microsoft Excel
+  36  * Version:     16.0
+  37  * Workbook:    D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\test_data.xlsx
+  38  * Sheet:       Sheet6
+  39  * Range:       $C$5:$E$5
+  40  * -----------------------------------------------------
+  41  1   ,2   ,3
+  42  * -----------------------------------------------------
+  43  /;
+  44  Alias (i,ip);
+  45   
+  46  Parameter
+  47      r(i)/
+INCLUDE    D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\par1.inc
+  50  * -----------------------------------------------------
+  51  * XLS2GMS 2.8      40.1.1 23eb37fb Aug 16, 2022          VS8 x86 32bit/MS Window
+  52  * Erwin Kalvelagen, GAMS Development Corp.
+  53  * -----------------------------------------------------
+  54  * Application: Microsoft Excel
+  55  * Version:     16.0
+  56  * Workbook:    D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\test_data.xlsx
+  57  * Sheet:       Sheet6
+  58  * Range:       $G$6:$H$17
+  59  * -----------------------------------------------------
+  60  1    2
+  61  2    3
+  62  3    4
+  63  4    5
+  64  5    10
+  65  6    1
+  66  7    2
+  67  8    4
+  68  9    10
+  69  10   1
+  70  11   5
+  71  12   2
+  72  * -----------------------------------------------------
+  73  /
+  74      d(i)/
+INCLUDE    D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\par2.inc
+  77  * -----------------------------------------------------
+  78  * XLS2GMS 2.8      40.1.1 23eb37fb Aug 16, 2022          VS8 x86 32bit/MS Window
+  79  * Erwin Kalvelagen, GAMS Development Corp.
+  80  * -----------------------------------------------------
+  81  * Application: Microsoft Excel
+  82  * Version:     16.0
+  83  * Workbook:    D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\test_data.xlsx
+  84  * Sheet:       Sheet6
+  85  * Range:       $J$6:$K$17
+  86  * -----------------------------------------------------
+  87  1    36
+  88  2    33
+  89  3    31
+  90  4    38
+  91  5    34
+  92  6    38
+  93  7    33
+  94  8    25
+  95  9    38
+  96  10   39
+  97  11   30
+  98  12   20
+  99  * -----------------------------------------------------
+ 100  /
+ 101      id(j)/
+INCLUDE    D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\par3.inc
+ 104  * -----------------------------------------------------
+ 105  * XLS2GMS 2.8      40.1.1 23eb37fb Aug 16, 2022          VS8 x86 32bit/MS Window
+ 106  * Erwin Kalvelagen, GAMS Development Corp.
+ 107  * -----------------------------------------------------
+ 108  * Application: Microsoft Excel
+ 109  * Version:     16.0
+ 110  * Workbook:    D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\test_data.xlsx
+ 111  * Sheet:       Sheet6
+ 112  * Range:       $A$21:$B$23
+ 113  * -----------------------------------------------------
+ 114  1    1
+ 115  2    2
+ 116  3    3
+ 117  * -----------------------------------------------------
+ 118  /;
+ 119   
+ 120  Table
+ 121   p(i,j)
+INCLUDE    D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\tab1.inc
+ 124  * -----------------------------------------------------
+ 125  * XLS2GMS 2.8      40.1.1 23eb37fb Aug 16, 2022          VS8 x86 32bit/MS Window
+ 126  * Erwin Kalvelagen, GAMS Development Corp.
+ 127  * -----------------------------------------------------
+ 128  * Application: Microsoft Excel
+ 129  * Version:     16.0
+ 130  * Workbook:    D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\test_data.xlsx
+ 131  * Sheet:       Sheet6
+ 132  * Range:       $B$5:$E$17
+ 133  * -----------------------------------------------------
+ 134       1    2    3
+ 135  1    5    7    6
+ 136  2    3    4    3
+ 137  3    2    4    3
+ 138  4    3    6    4
+ 139  5    2    4    3
+ 140  6    1    3    2
+ 141  7    1    2    1
+ 142  8    2    5    4
+ 143  9    4    6    6
+ 144  10   3    5    2
+ 145  11   2    3    2
+ 146  12   2    6    4
+ 147  * -----------------------------------------------------
+ 148  ;
+ 149   
+ 150  Table
+ 151  cost(i, j)
+INCLUDE    D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\tab2.inc
+ 154  * -----------------------------------------------------
+ 155  * XLS2GMS 2.8      40.1.1 23eb37fb Aug 16, 2022          VS8 x86 32bit/MS Window
+ 156  * Erwin Kalvelagen, GAMS Development Corp.
+ 157  * -----------------------------------------------------
+ 158  * Application: Microsoft Excel
+ 159  * Version:     16.0
+ 160  * Workbook:    D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\test_data.xlsx
+ 161  * Sheet:       Sheet6
+ 162  * Range:       $B$20:$E$32
+ 163  * -----------------------------------------------------
+ 164       1    2    3
+ 165  1    10   6    8
+ 166  2    8    5    6
+ 167  3    12   7    10
+ 168  4    10   6    8
+ 169  5    8    5    7
+ 170  6    12   7    10
+ 171  7    12   10   11
+ 172  8    9    5    7
+ 173  9    10   6    8
+ 174  10   8    5    7
+ 175  11   15   9    12
+ 176  12   13   7    10
+ 177  * -----------------------------------------------------
+ 178  ;
+ 179   
+ 180  Table
+ 181  setup(i,ip)
+INCLUDE    D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\tab3.inc
+ 184  * -----------------------------------------------------
+ 185  * XLS2GMS 2.8      40.1.1 23eb37fb Aug 16, 2022          VS8 x86 32bit/MS Window
+ 186  * Erwin Kalvelagen, GAMS Development Corp.
+ 187  * -----------------------------------------------------
+ 188  * Application: Microsoft Excel
+ 189  * Version:     16.0
+ 190  * Workbook:    D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\test_data.xlsx
+ 191  * Sheet:       Sheet6
+ 192  * Range:       $G$20:$J$32
+ 193  * -----------------------------------------------------
+ 194       1    2    3
+ 195  1    4    4    5
+ 196  2    4    4    5
+ 197  3    4    4    5
+ 198  4    4    4    5
+ 199  5    4    4    5
+ 200  6    4    4    5
+ 201  7    4    4    5
+ 202  8    4    4    5
+ 203  9    4    4    5
+ 204  10   4    4    5
+ 205  11   4    4    5
+ 206  12   4    4    5
+ 207  * -----------------------------------------------------
+ 208  ;
+ 209   
+ 210  Binary Variables
+ 211   
+ 212  A(i, ip) 'order i occurs on a machine with number less than or equal to that of ip'
+ 213  B(i, ip) 'order i finishes before or at start time of ip with setup time required if i is processed before ip in between'
+ 214  Z(i, ip) 'order i and ip on same machine and i finishes at or before ip'
+ 215  Y(i, ip) 'no of orders after i on m_i - no of orders after ip on m_ip >= 1'
+ 216  Yp(i, ip) 'no of orders after i on m_i - no of orders after ip on m_ip <= 1'
+ 217  adj(i, ip) 'order ip is the order next after i on the same machine'
+ 218  m(i, j) 'order i occurs on machine j'
+ 219  Xf(i) 'Xf(i) = 1 if order i has largest finish time'
+ 220  Xs(i) 'Xs(i) = 1 if order i has smallest start time'
+ 221  ;
+ 222   
+ 223  Integer Variable
+ 224  s(i) 'start time of order i'
+ 225  f(i) 'finish time of order i'
+ 226  C(i) 'number of orders scheduled after order i on the same machine'
+ 227  lf 'largest finish time'
+ 228  es 'earliest start time'
+ 229  ;
+ 230   
+ 231  Variable
+ 232  p_cost 'processing cost'
+ 233  makespan
+ 234  p_time 'processing time'
+ 235  ;
+ 236   
+ 237  Scalar U /10000/;
+ 238   
+ 239  s.lo(i) = r(i);
+ 240  s.up(i) = d(i);
+ 241   
+ 242  Equation
+ 243      cost_obj
+ 244      ptime_obj
+ 245      makespan_obj
+ 246   
+ 247      finish_time(i)
+ 248      mac_con(i)
+ 249      process_end(i)
+ 250   
+ 251      finish_before_start(i,ip)
+ 252      tight_constraint_fbs(i, ip)
+ 253      machine_num_lesseq(i,ip)
+ 254      tight_constraint_mnl(i, ip)
+ 255      overlap(i,ip)
+ 256   
+ 257      finish_before_start_and_same_mac(i,ip)
+ 258      tc_fbssm(i,ip)
+ 259      n_following_orders(i)
+ 260      setY(i,ip)
+ 261      tc_setY(i,ip)
+ 262      setYp(i,ip)
+ 263      tc_setYp(i,ip)
+ 264      adj_nextorder_same_mac(i,ip)
+ 265      tc_nosm(i,ip)
+ 266   
+ 267      select_latest
+ 268      select_earliest
+ 269      confirm_lf(i)
+ 270      set_lf(i)
+ 271      confirm_es(i)
+ 272      set_es(i)
+ 273   
+ 274  ;
+ 275   
+ 276  * total cost = summation of cost of processing order i on machine m(i)
+ 277  cost_obj.. p_cost =e= sum((i,j), cost(i, j)*m(i, j));
+ 278   
+ 279  * p_time = summation of processing times of order i on machine m(i)
+ 280  ptime_obj.. p_time =e= sum((i, j), p(i, j)*m(i, j));
+ 281   
+ 282  * makespan = largest finish time - earliest start time
+ 283  makespan_obj.. makespan =e= lf - es;
+ 284   
+ 285  * finish_time of order i = start time of order i + processing time of order i on machine m(i)
+ 286  finish_time(i).. f(i) =e= s(i) + sum(j, p(i, j)*m(i, j)) ;
+ 287   
+ 288  * every order operates on exactly one machine
+ 289  mac_con(i).. sum(j, m(i, j)) =e= 1;
+ 290   
+ 291  *every order should finish before its due date d(i)
+ 292  process_end(i).. f(i) =l= d(i);
+ 293   
+ 294  * set B(i, ip) =1 iff order i finishes before or at start time of ip with setup time required if i is processed before ip in between
+ 295  finish_before_start(i,ip).. f(i)+ adj(i,ip)*setup(i,ip) =l= s(ip) + U*(1-B(i,ip));
+ 296  tight_constraint_fbs(i, ip)..  1 + s(ip) =l= f(i)+adj(i,ip)*setup(i,ip) + U*B(i,ip);
+ 297   
+ 298  *set A(i, ip) = 1 iff order i occurs on a machine with number less than or equal to that of ip
+ 299  machine_num_lesseq(i,ip).. sum(j, m(i,j)*id(j)) - sum(j, m(ip,j)*id(j)) =l= U*(1 - A(i,ip));
+ 300  tight_constraint_mnl(i, ip).. 1 + sum(j, m(ip,j)*id(j)) =l= U*A(i,ip) + sum(j, m(i,j)*id(j)) ;
+ 301   
+ 302  * if order i and ip are operating on the same machine, then either i should finish before ip or ip should finish before i
+ 303  overlap(i,ip).. 1 $ (not sameAs(i,ip)) =l= B(ip,i)+ B(i,ip)+ U*(1 - (A(i,ip) + A(ip,i) - 1));
+ 304   
+ 305  * set Z(i , ip) = 1 iff order i and ip on same machine and i finishes at or before ip
+ 306  finish_before_start_and_same_mac(i,ip).. ((B(i,ip) + (A(i,ip) + A(ip,i) - 1)) - 1) =l= U*Z(i,ip);
+ 307  tc_fbssm(i,ip).. 1 =l= ((B(i,ip) + (A(i,ip) + A(ip,i) - 1)) - 1) + U*(1 - Z(i,ip));
+ 308   
+ 309  * C(i) = number of orders after order i on the same machine
+ 310  n_following_orders(i).. C(i) =e= sum(ip, Z(i, ip)) - Z(i,i);
+ 311   
+ 312  * set Y(i, ip) = 1 iff no of orders after i on m_i - no of orders after ip on m_ip >= 1
+ 313  setY(i,ip).. C(i) - C(ip) =l= U*Y(i,ip);
+ 314  tc_setY(i,ip).. 1 =l= C(i) - C(ip) + U*(1 - Y(i,ip));
+ 315   
+ 316  * set Yp(i, ip) = 1 iff no of orders after i on m_i - no of orders after ip on m_ip <= 1
+ 317  setYp(i,ip).. 2 =l= U*Yp(i,ip) + C(i) - C(ip);
+ 318  tc_setYp(i,ip).. C(i) - C(ip) =l= 1+ U*(1 - Yp(i,ip));
+ 319   
+ 320  * set adj(i, ip) = 1 iff order ip is the order next after i on the same machine
+ 321  adj_nextorder_same_mac(i,ip).. (((Y(i,ip) + Yp(i,ip) - 1) + (A(i,ip) + A(ip,i) - 1)) - 1) =l= U*adj(i,ip);
+ 322  tc_nosm(i,ip).. 1 =l= (((Y(i,ip) + Yp(i,ip)- 1) + (A(i,ip) + A(ip,i) - 1)) - 1) + U*(1 - adj(i,ip));
+ 323   
+ 324   
+ 325  * summation of Xf(i) = summation of Xs(i) = 1, to select the latest and the earliest order respectively
+ 326  select_latest.. sum(i, Xf(i)) =e= 1;
+ 327  select_earliest.. sum(i, Xs(i)) =e= 1;
+ 328   
+ 329  *confirming lf, es
+ 330  confirm_lf(i).. lf =g= f(i);
+ 331  confirm_es(i).. es =l= s(i);
+ 332   
+ 333  * setting lf, es
+ 334  set_lf(i).. lf =l= U*(1 - Xf(i)) + f(i);
+ 335  set_es(i).. es + U*(1 - Xs(i)) =g= s(i);
+ 336   
+ 337   
+ 338  Model jssp /all/;
+ 339  solve jssp using mip minimizing p_cost;
+ 340  display  p,A.l, B.l,s.l, f.l, m.l, Y.l, C.l, Yp.l;
+GAMS 40.1.1  23eb37fb Aug 16, 2022          WEX-WEI x86 64bit/MS Windows - 12/05/22 19:10:47 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Include File Summary
+
+
+   SEQ   GLOBAL TYPE      PARENT   LOCAL  FILENAME
+
+     1        1 INPUT          0       0  D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\problem_6_no_eps.gms
+     2        2 CALL           1       2  =xls2gms r=Sheet6!b6:b17 i=test_data.xlsx o=set1.inc
+     3        3 INCLUDE        1       3  .D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\set1.inc
+     4       29 CALL           1       6  =xls2gms r=Sheet6!c5:e5 s="," i=test_data.xlsx o=set2.inc
+     5       30 INCLUDE        1       7  .D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\set2.inc
+     6       48 CALL           1      13  =xls2gms r=Sheet6!g6:h17 i=test_data.xlsx o=par1.inc
+     7       49 INCLUDE        1      14  .D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\par1.inc
+     8       75 CALL           1      17  =xls2gms r=Sheet6!j6:k17 i=test_data.xlsx o=par2.inc
+     9       76 INCLUDE        1      18  .D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\par2.inc
+    10      102 CALL           1      21  =xls2gms r=Sheet6!a21:b23 i=test_data.xlsx o=par3.inc
+    11      103 INCLUDE        1      22  .D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\par3.inc
+    12      122 CALL           1      27  =xls2gms r=Sheet6!b5:e17 i=test_data.xlsx o=tab1.inc
+    13      123 INCLUDE        1      28  .D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\tab1.inc
+    14      152 CALL           1      33  =xls2gms r=Sheet6!b20:e32 i=test_data.xlsx o=tab2.inc
+    15      153 INCLUDE        1      34  .D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\tab2.inc
+    16      182 CALL           1      39  =xls2gms r=Sheet6!g20:j32 i=test_data.xlsx o=tab3.inc
+    17      183 INCLUDE        1      40  .D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\tab3.inc
+
+
+COMPILATION TIME     =       64.437 SECONDS      3 MB  40.1.1 23eb37fb WEX-WEI
+GAMS 40.1.1  23eb37fb Aug 16, 2022          WEX-WEI x86 64bit/MS Windows - 12/05/22 19:10:47 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE jssp Using MIP From line 339
+
+
+---- cost_obj  =E=  
+
+cost_obj..  - 10*m(1,1) - 6*m(1,2) - 8*m(1,3) - 8*m(2,1) - 5*m(2,2) - 6*m(2,3) - 12*m(3,1) - 7*m(3,2) - 10*m(3,3) - 10*m(4,1) - 6*m(4,2) - 8*m(4,3) - 8*m(5,1) - 5*m(5,2) - 7*m(5,3) - 12*m(6,1) - 7*m(6,2) - 10*m(6,3) - 12*m(7,1) - 10*m(7,2) - 11*m(7,3) - 9*m(8,1) - 5*m(8,2) - 7*m(8,3) - 10*m(9,1) - 6*m(9,2) - 8*m(9,3) - 8*m(10,1) - 5*m(10,2) - 7*m(10,3) - 15*m(11,1) - 9*m(11,2) - 12*m(11,3) - 13*m(12,1) - 7*m(12,2) - 10*m(12,3) + p_cost =E= 0 ; (LHS = 0)
+     
+
+---- ptime_obj  =E=  
+
+ptime_obj..  - 5*m(1,1) - 7*m(1,2) - 6*m(1,3) - 3*m(2,1) - 4*m(2,2) - 3*m(2,3) - 2*m(3,1) - 4*m(3,2) - 3*m(3,3) - 3*m(4,1) - 6*m(4,2) - 4*m(4,3) - 2*m(5,1) - 4*m(5,2) - 3*m(5,3) - m(6,1) - 3*m(6,2) - 2*m(6,3) - m(7,1) - 2*m(7,2) - m(7,3) - 2*m(8,1) - 5*m(8,2) - 4*m(8,3) - 4*m(9,1) - 6*m(9,2) - 6*m(9,3) - 3*m(10,1) - 5*m(10,2) - 2*m(10,3) - 2*m(11,1) - 3*m(11,2) - 2*m(11,3) - 2*m(12,1) - 6*m(12,2) - 4*m(12,3) + p_time =E= 0 ; (LHS = 0)
+     
+
+---- makespan_obj  =E=  
+
+makespan_obj..  - lf + es + makespan =E= 0 ; (LHS = 0)
+     
+
+---- finish_time  =E=  
+
+finish_time(1)..  - 5*m(1,1) - 7*m(1,2) - 6*m(1,3) - s(1) + f(1) =E= 0 ; (LHS = -2, INFES = 2 ****)
+     
+finish_time(2)..  - 3*m(2,1) - 4*m(2,2) - 3*m(2,3) - s(2) + f(2) =E= 0 ; (LHS = -3, INFES = 3 ****)
+     
+finish_time(3)..  - 2*m(3,1) - 4*m(3,2) - 3*m(3,3) - s(3) + f(3) =E= 0 ; (LHS = -4, INFES = 4 ****)
+     
+REMAINING 9 ENTRIES SKIPPED
+
+
+---- mac_con  =E=  
+
+mac_con(1)..  m(1,1) + m(1,2) + m(1,3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+mac_con(2)..  m(2,1) + m(2,2) + m(2,3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+mac_con(3)..  m(3,1) + m(3,2) + m(3,3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+REMAINING 9 ENTRIES SKIPPED
+
+
+---- process_end  =L=  
+
+process_end(1)..  f(1) =L= 36 ; (LHS = 0)
+     
+process_end(2)..  f(2) =L= 33 ; (LHS = 0)
+     
+process_end(3)..  f(3) =L= 31 ; (LHS = 0)
+     
+REMAINING 9 ENTRIES SKIPPED
+
+
+---- finish_before_start  =L=  
+
+finish_before_start(1,1)..  10000*B(1,1) + 4*adj(1,1) - s(1) + f(1) =L= 10000 ; (LHS = -2)
+     
+finish_before_start(1,2)..  10000*B(1,2) + 4*adj(1,2) - s(2) + f(1) =L= 10000 ; (LHS = -3)
+     
+finish_before_start(1,3)..  10000*B(1,3) + 5*adj(1,3) - s(3) + f(1) =L= 10000 ; (LHS = -4)
+     
+REMAINING 141 ENTRIES SKIPPED
+
+
+---- tight_constraint_fbs  =L=  
+
+tight_constraint_fbs(1,1)..  - 10000*B(1,1) - 4*adj(1,1) + s(1) - f(1) =L= -1 ; (LHS = 2, INFES = 3 ****)
+     
+tight_constraint_fbs(1,2)..  - 10000*B(1,2) - 4*adj(1,2) + s(2) - f(1) =L= -1 ; (LHS = 3, INFES = 4 ****)
+     
+tight_constraint_fbs(1,3)..  - 10000*B(1,3) - 5*adj(1,3) + s(3) - f(1) =L= -1 ; (LHS = 4, INFES = 5 ****)
+     
+REMAINING 141 ENTRIES SKIPPED
+
+
+---- machine_num_lesseq  =L=  
+
+machine_num_lesseq(1,1)..  10000*A(1,1) =L= 10000 ; (LHS = 0)
+     
+machine_num_lesseq(1,2)..  10000*A(1,2) + m(1,1) + 2*m(1,2) + 3*m(1,3) - m(2,1) - 2*m(2,2) - 3*m(2,3) =L= 10000 ; (LHS = 0)
+     
+machine_num_lesseq(1,3)..  10000*A(1,3) + m(1,1) + 2*m(1,2) + 3*m(1,3) - m(3,1) - 2*m(3,2) - 3*m(3,3) =L= 10000 ; (LHS = 0)
+     
+REMAINING 141 ENTRIES SKIPPED
+
+
+---- tight_constraint_mnl  =L=  
+
+tight_constraint_mnl(1,1)..  - 10000*A(1,1) =L= -1 ; (LHS = 0, INFES = 1 ****)
+     
+tight_constraint_mnl(1,2)..  - 10000*A(1,2) - m(1,1) - 2*m(1,2) - 3*m(1,3) + m(2,1) + 2*m(2,2) + 3*m(2,3) =L= -1 ; (LHS = 0, INFES = 1 ****)
+     
+tight_constraint_mnl(1,3)..  - 10000*A(1,3) - m(1,1) - 2*m(1,2) - 3*m(1,3) + m(3,1) + 2*m(3,2) + 3*m(3,3) =L= -1 ; (LHS = 0, INFES = 1 ****)
+     
+REMAINING 141 ENTRIES SKIPPED
+
+
+---- overlap  =L=  
+
+overlap(1,1)..  20000*A(1,1) - 2*B(1,1) =L= 20000 ; (LHS = 0)
+     
+overlap(1,2)..  10000*A(1,2) + 10000*A(2,1) - B(1,2) - B(2,1) =L= 19999 ; (LHS = 0)
+     
+overlap(1,3)..  10000*A(1,3) + 10000*A(3,1) - B(1,3) - B(3,1) =L= 19999 ; (LHS = 0)
+     
+REMAINING 141 ENTRIES SKIPPED
+
+
+---- finish_before_start_and_same_mac  =L=  
+
+finish_before_start_and_same_mac(1,1)..  2*A(1,1) + B(1,1) - 10000*Z(1,1) =L= 2 ; (LHS = 0)
+     
+finish_before_start_and_same_mac(1,2)..  A(1,2) + A(2,1) + B(1,2) - 10000*Z(1,2) =L= 2 ; (LHS = 0)
+     
+finish_before_start_and_same_mac(1,3)..  A(1,3) + A(3,1) + B(1,3) - 10000*Z(1,3) =L= 2 ; (LHS = 0)
+     
+REMAINING 141 ENTRIES SKIPPED
+
+
+---- tc_fbssm  =L=  
+
+tc_fbssm(1,1)..  - 2*A(1,1) - B(1,1) + 10000*Z(1,1) =L= 9997 ; (LHS = 0)
+     
+tc_fbssm(1,2)..  - A(1,2) - A(2,1) - B(1,2) + 10000*Z(1,2) =L= 9997 ; (LHS = 0)
+     
+tc_fbssm(1,3)..  - A(1,3) - A(3,1) - B(1,3) + 10000*Z(1,3) =L= 9997 ; (LHS = 0)
+     
+REMAINING 141 ENTRIES SKIPPED
+
+
+---- n_following_orders  =E=  
+
+n_following_orders(1)..  - Z(1,2) - Z(1,3) - Z(1,4) - Z(1,5) - Z(1,6) - Z(1,7) - Z(1,8) - Z(1,9) - Z(1,10) - Z(1,11) - Z(1,12) + C(1) =E= 0 ; (LHS = 0)
+     
+n_following_orders(2)..  - Z(2,1) - Z(2,3) - Z(2,4) - Z(2,5) - Z(2,6) - Z(2,7) - Z(2,8) - Z(2,9) - Z(2,10) - Z(2,11) - Z(2,12) + C(2) =E= 0 ; (LHS = 0)
+     
+n_following_orders(3)..  - Z(3,1) - Z(3,2) - Z(3,4) - Z(3,5) - Z(3,6) - Z(3,7) - Z(3,8) - Z(3,9) - Z(3,10) - Z(3,11) - Z(3,12) + C(3) =E= 0 ; (LHS = 0)
+     
+REMAINING 9 ENTRIES SKIPPED
+
+
+---- setY  =L=  
+
+setY(1,1)..  - 10000*Y(1,1) =L= 0 ; (LHS = 0)
+     
+setY(1,2)..  - 10000*Y(1,2) + C(1) - C(2) =L= 0 ; (LHS = 0)
+     
+setY(1,3)..  - 10000*Y(1,3) + C(1) - C(3) =L= 0 ; (LHS = 0)
+     
+REMAINING 141 ENTRIES SKIPPED
+
+
+---- tc_setY  =L=  
+
+tc_setY(1,1)..  10000*Y(1,1) =L= 9999 ; (LHS = 0)
+     
+tc_setY(1,2)..  10000*Y(1,2) - C(1) + C(2) =L= 9999 ; (LHS = 0)
+     
+tc_setY(1,3)..  10000*Y(1,3) - C(1) + C(3) =L= 9999 ; (LHS = 0)
+     
+REMAINING 141 ENTRIES SKIPPED
+
+
+---- setYp  =L=  
+
+setYp(1,1)..  - 10000*Yp(1,1) =L= -2 ; (LHS = 0, INFES = 2 ****)
+     
+setYp(1,2)..  - 10000*Yp(1,2) - C(1) + C(2) =L= -2 ; (LHS = 0, INFES = 2 ****)
+     
+setYp(1,3)..  - 10000*Yp(1,3) - C(1) + C(3) =L= -2 ; (LHS = 0, INFES = 2 ****)
+     
+REMAINING 141 ENTRIES SKIPPED
+
+
+---- tc_setYp  =L=  
+
+tc_setYp(1,1)..  10000*Yp(1,1) =L= 10001 ; (LHS = 0)
+     
+tc_setYp(1,2)..  10000*Yp(1,2) + C(1) - C(2) =L= 10001 ; (LHS = 0)
+     
+tc_setYp(1,3)..  10000*Yp(1,3) + C(1) - C(3) =L= 10001 ; (LHS = 0)
+     
+REMAINING 141 ENTRIES SKIPPED
+
+
+---- adj_nextorder_same_mac  =L=  
+
+adj_nextorder_same_mac(1,1)..  2*A(1,1) + Y(1,1) + Yp(1,1) - 10000*adj(1,1) =L= 3 ; (LHS = 0)
+     
+adj_nextorder_same_mac(1,2)..  A(1,2) + A(2,1) + Y(1,2) + Yp(1,2) - 10000*adj(1,2) =L= 3 ; (LHS = 0)
+     
+adj_nextorder_same_mac(1,3)..  A(1,3) + A(3,1) + Y(1,3) + Yp(1,3) - 10000*adj(1,3) =L= 3 ; (LHS = 0)
+     
+REMAINING 141 ENTRIES SKIPPED
+
+
+---- tc_nosm  =L=  
+
+tc_nosm(1,1)..  - 2*A(1,1) - Y(1,1) - Yp(1,1) + 10000*adj(1,1) =L= 9996 ; (LHS = 0)
+     
+tc_nosm(1,2)..  - A(1,2) - A(2,1) - Y(1,2) - Yp(1,2) + 10000*adj(1,2) =L= 9996 ; (LHS = 0)
+     
+tc_nosm(1,3)..  - A(1,3) - A(3,1) - Y(1,3) - Yp(1,3) + 10000*adj(1,3) =L= 9996 ; (LHS = 0)
+     
+REMAINING 141 ENTRIES SKIPPED
+
+
+---- select_latest  =E=  
+
+select_latest..  Xf(1) + Xf(2) + Xf(3) + Xf(4) + Xf(5) + Xf(6) + Xf(7) + Xf(8) + Xf(9) + Xf(10) + Xf(11) + Xf(12) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- select_earliest  =E=  
+
+select_earliest..  Xs(1) + Xs(2) + Xs(3) + Xs(4) + Xs(5) + Xs(6) + Xs(7) + Xs(8) + Xs(9) + Xs(10) + Xs(11) + Xs(12) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- confirm_lf  =G=  
+
+confirm_lf(1)..  - f(1) + lf =G= 0 ; (LHS = 0)
+     
+confirm_lf(2)..  - f(2) + lf =G= 0 ; (LHS = 0)
+     
+confirm_lf(3)..  - f(3) + lf =G= 0 ; (LHS = 0)
+     
+REMAINING 9 ENTRIES SKIPPED
+
+
+---- set_lf  =L=  
+
+set_lf(1)..  10000*Xf(1) - f(1) + lf =L= 10000 ; (LHS = 0)
+     
+set_lf(2)..  10000*Xf(2) - f(2) + lf =L= 10000 ; (LHS = 0)
+     
+set_lf(3)..  10000*Xf(3) - f(3) + lf =L= 10000 ; (LHS = 0)
+     
+REMAINING 9 ENTRIES SKIPPED
+
+
+---- confirm_es  =L=  
+
+confirm_es(1)..  - s(1) + es =L= 0 ; (LHS = -2)
+     
+confirm_es(2)..  - s(2) + es =L= 0 ; (LHS = -3)
+     
+confirm_es(3)..  - s(3) + es =L= 0 ; (LHS = -4)
+     
+REMAINING 9 ENTRIES SKIPPED
+
+
+---- set_es  =G=  
+
+set_es(1)..  - 10000*Xs(1) - s(1) + es =G= -10000 ; (LHS = -2)
+     
+set_es(2)..  - 10000*Xs(2) - s(2) + es =G= -10000 ; (LHS = -3)
+     
+set_es(3)..  - 10000*Xs(3) - s(3) + es =G= -10000 ; (LHS = -4)
+     
+REMAINING 9 ENTRIES SKIPPED
+
+GAMS 40.1.1  23eb37fb Aug 16, 2022          WEX-WEI x86 64bit/MS Windows - 12/05/22 19:10:47 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE jssp Using MIP From line 339
+
+
+---- A  order i occurs on a machine with number less than or equal to that of ip
+
+A(1,1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+    10000       machine_num_lesseq(1,1)
+   -10000       tight_constraint_mnl(1,1)
+    20000       overlap(1,1)
+        2       finish_before_start_and_same_mac(1,1)
+       -2       tc_fbssm(1,1)
+        2       adj_nextorder_same_mac(1,1)
+       -2       tc_nosm(1,1)
+
+A(1,2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+    10000       machine_num_lesseq(1,2)
+   -10000       tight_constraint_mnl(1,2)
+    10000       overlap(1,2)
+    10000       overlap(2,1)
+        1       finish_before_start_and_same_mac(1,2)
+        1       finish_before_start_and_same_mac(2,1)
+       -1       tc_fbssm(1,2)
+       -1       tc_fbssm(2,1)
+        1       adj_nextorder_same_mac(1,2)
+        1       adj_nextorder_same_mac(2,1)
+       -1       tc_nosm(1,2)
+       -1       tc_nosm(2,1)
+
+A(1,3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+    10000       machine_num_lesseq(1,3)
+   -10000       tight_constraint_mnl(1,3)
+    10000       overlap(1,3)
+    10000       overlap(3,1)
+        1       finish_before_start_and_same_mac(1,3)
+        1       finish_before_start_and_same_mac(3,1)
+       -1       tc_fbssm(1,3)
+       -1       tc_fbssm(3,1)
+        1       adj_nextorder_same_mac(1,3)
+        1       adj_nextorder_same_mac(3,1)
+       -1       tc_nosm(1,3)
+       -1       tc_nosm(3,1)
+
+REMAINING 141 ENTRIES SKIPPED
+
+---- B  order i finishes before or at start time of ip with setup time required if i is processed before ip in between
+
+B(1,1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+    10000       finish_before_start(1,1)
+   -10000       tight_constraint_fbs(1,1)
+       -2       overlap(1,1)
+        1       finish_before_start_and_same_mac(1,1)
+       -1       tc_fbssm(1,1)
+
+B(1,2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+    10000       finish_before_start(1,2)
+   -10000       tight_constraint_fbs(1,2)
+       -1       overlap(1,2)
+       -1       overlap(2,1)
+        1       finish_before_start_and_same_mac(1,2)
+       -1       tc_fbssm(1,2)
+
+B(1,3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+    10000       finish_before_start(1,3)
+   -10000       tight_constraint_fbs(1,3)
+       -1       overlap(1,3)
+       -1       overlap(3,1)
+        1       finish_before_start_and_same_mac(1,3)
+       -1       tc_fbssm(1,3)
+
+REMAINING 141 ENTRIES SKIPPED
+
+---- Z  order i and ip on same machine and i finishes at or before ip
+
+Z(1,1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+   -10000       finish_before_start_and_same_mac(1,1)
+    10000       tc_fbssm(1,1)
+
+Z(1,2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+   -10000       finish_before_start_and_same_mac(1,2)
+    10000       tc_fbssm(1,2)
+       -1       n_following_orders(1)
+
+Z(1,3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+   -10000       finish_before_start_and_same_mac(1,3)
+    10000       tc_fbssm(1,3)
+       -1       n_following_orders(1)
+
+REMAINING 141 ENTRIES SKIPPED
+
+---- Y  no of orders after i on m_i - no of orders after ip on m_ip >= 1
+
+Y(1,1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+   -10000       setY(1,1)
+    10000       tc_setY(1,1)
+        1       adj_nextorder_same_mac(1,1)
+       -1       tc_nosm(1,1)
+
+Y(1,2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+   -10000       setY(1,2)
+    10000       tc_setY(1,2)
+        1       adj_nextorder_same_mac(1,2)
+       -1       tc_nosm(1,2)
+
+Y(1,3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+   -10000       setY(1,3)
+    10000       tc_setY(1,3)
+        1       adj_nextorder_same_mac(1,3)
+       -1       tc_nosm(1,3)
+
+REMAINING 141 ENTRIES SKIPPED
+
+---- Yp  no of orders after i on m_i - no of orders after ip on m_ip <= 1
+
+Yp(1,1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+   -10000       setYp(1,1)
+    10000       tc_setYp(1,1)
+        1       adj_nextorder_same_mac(1,1)
+       -1       tc_nosm(1,1)
+
+Yp(1,2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+   -10000       setYp(1,2)
+    10000       tc_setYp(1,2)
+        1       adj_nextorder_same_mac(1,2)
+       -1       tc_nosm(1,2)
+
+Yp(1,3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+   -10000       setYp(1,3)
+    10000       tc_setYp(1,3)
+        1       adj_nextorder_same_mac(1,3)
+       -1       tc_nosm(1,3)
+
+REMAINING 141 ENTRIES SKIPPED
+
+---- adj  order ip is the order next after i on the same machine
+
+adj(1,1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        4       finish_before_start(1,1)
+       -4       tight_constraint_fbs(1,1)
+   -10000       adj_nextorder_same_mac(1,1)
+    10000       tc_nosm(1,1)
+
+adj(1,2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        4       finish_before_start(1,2)
+       -4       tight_constraint_fbs(1,2)
+   -10000       adj_nextorder_same_mac(1,2)
+    10000       tc_nosm(1,2)
+
+adj(1,3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        5       finish_before_start(1,3)
+       -5       tight_constraint_fbs(1,3)
+   -10000       adj_nextorder_same_mac(1,3)
+    10000       tc_nosm(1,3)
+
+REMAINING 141 ENTRIES SKIPPED
+
+---- m  order i occurs on machine j
+
+m(1,1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+      -10       cost_obj
+       -5       ptime_obj
+       -5       finish_time(1)
+        1       mac_con(1)
+        1       machine_num_lesseq(1,2)
+        1       machine_num_lesseq(1,3)
+        1       machine_num_lesseq(1,4)
+        1       machine_num_lesseq(1,5)
+        1       machine_num_lesseq(1,6)
+        1       machine_num_lesseq(1,7)
+        1       machine_num_lesseq(1,8)
+        1       machine_num_lesseq(1,9)
+        1       machine_num_lesseq(1,10)
+        1       machine_num_lesseq(1,11)
+        1       machine_num_lesseq(1,12)
+       -1       machine_num_lesseq(2,1)
+       -1       machine_num_lesseq(3,1)
+       -1       machine_num_lesseq(4,1)
+       -1       machine_num_lesseq(5,1)
+       -1       machine_num_lesseq(6,1)
+       -1       machine_num_lesseq(7,1)
+       -1       machine_num_lesseq(8,1)
+       -1       machine_num_lesseq(9,1)
+       -1       machine_num_lesseq(10,1)
+       -1       machine_num_lesseq(11,1)
+       -1       machine_num_lesseq(12,1)
+       -1       tight_constraint_mnl(1,2)
+       -1       tight_constraint_mnl(1,3)
+       -1       tight_constraint_mnl(1,4)
+       -1       tight_constraint_mnl(1,5)
+       -1       tight_constraint_mnl(1,6)
+       -1       tight_constraint_mnl(1,7)
+       -1       tight_constraint_mnl(1,8)
+       -1       tight_constraint_mnl(1,9)
+       -1       tight_constraint_mnl(1,10)
+       -1       tight_constraint_mnl(1,11)
+       -1       tight_constraint_mnl(1,12)
+        1       tight_constraint_mnl(2,1)
+        1       tight_constraint_mnl(3,1)
+        1       tight_constraint_mnl(4,1)
+        1       tight_constraint_mnl(5,1)
+        1       tight_constraint_mnl(6,1)
+        1       tight_constraint_mnl(7,1)
+        1       tight_constraint_mnl(8,1)
+        1       tight_constraint_mnl(9,1)
+        1       tight_constraint_mnl(10,1)
+        1       tight_constraint_mnl(11,1)
+        1       tight_constraint_mnl(12,1)
+
+m(1,2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -6       cost_obj
+       -7       ptime_obj
+       -7       finish_time(1)
+        1       mac_con(1)
+        2       machine_num_lesseq(1,2)
+        2       machine_num_lesseq(1,3)
+        2       machine_num_lesseq(1,4)
+        2       machine_num_lesseq(1,5)
+        2       machine_num_lesseq(1,6)
+        2       machine_num_lesseq(1,7)
+        2       machine_num_lesseq(1,8)
+        2       machine_num_lesseq(1,9)
+        2       machine_num_lesseq(1,10)
+        2       machine_num_lesseq(1,11)
+        2       machine_num_lesseq(1,12)
+       -2       machine_num_lesseq(2,1)
+       -2       machine_num_lesseq(3,1)
+       -2       machine_num_lesseq(4,1)
+       -2       machine_num_lesseq(5,1)
+       -2       machine_num_lesseq(6,1)
+       -2       machine_num_lesseq(7,1)
+       -2       machine_num_lesseq(8,1)
+       -2       machine_num_lesseq(9,1)
+       -2       machine_num_lesseq(10,1)
+       -2       machine_num_lesseq(11,1)
+       -2       machine_num_lesseq(12,1)
+       -2       tight_constraint_mnl(1,2)
+       -2       tight_constraint_mnl(1,3)
+       -2       tight_constraint_mnl(1,4)
+       -2       tight_constraint_mnl(1,5)
+       -2       tight_constraint_mnl(1,6)
+       -2       tight_constraint_mnl(1,7)
+       -2       tight_constraint_mnl(1,8)
+       -2       tight_constraint_mnl(1,9)
+       -2       tight_constraint_mnl(1,10)
+       -2       tight_constraint_mnl(1,11)
+       -2       tight_constraint_mnl(1,12)
+        2       tight_constraint_mnl(2,1)
+        2       tight_constraint_mnl(3,1)
+        2       tight_constraint_mnl(4,1)
+        2       tight_constraint_mnl(5,1)
+        2       tight_constraint_mnl(6,1)
+        2       tight_constraint_mnl(7,1)
+        2       tight_constraint_mnl(8,1)
+        2       tight_constraint_mnl(9,1)
+        2       tight_constraint_mnl(10,1)
+        2       tight_constraint_mnl(11,1)
+        2       tight_constraint_mnl(12,1)
+
+m(1,3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -8       cost_obj
+       -6       ptime_obj
+       -6       finish_time(1)
+        1       mac_con(1)
+        3       machine_num_lesseq(1,2)
+        3       machine_num_lesseq(1,3)
+        3       machine_num_lesseq(1,4)
+        3       machine_num_lesseq(1,5)
+        3       machine_num_lesseq(1,6)
+        3       machine_num_lesseq(1,7)
+        3       machine_num_lesseq(1,8)
+        3       machine_num_lesseq(1,9)
+        3       machine_num_lesseq(1,10)
+        3       machine_num_lesseq(1,11)
+        3       machine_num_lesseq(1,12)
+       -3       machine_num_lesseq(2,1)
+       -3       machine_num_lesseq(3,1)
+       -3       machine_num_lesseq(4,1)
+       -3       machine_num_lesseq(5,1)
+       -3       machine_num_lesseq(6,1)
+       -3       machine_num_lesseq(7,1)
+       -3       machine_num_lesseq(8,1)
+       -3       machine_num_lesseq(9,1)
+       -3       machine_num_lesseq(10,1)
+       -3       machine_num_lesseq(11,1)
+       -3       machine_num_lesseq(12,1)
+       -3       tight_constraint_mnl(1,2)
+       -3       tight_constraint_mnl(1,3)
+       -3       tight_constraint_mnl(1,4)
+       -3       tight_constraint_mnl(1,5)
+       -3       tight_constraint_mnl(1,6)
+       -3       tight_constraint_mnl(1,7)
+       -3       tight_constraint_mnl(1,8)
+       -3       tight_constraint_mnl(1,9)
+       -3       tight_constraint_mnl(1,10)
+       -3       tight_constraint_mnl(1,11)
+       -3       tight_constraint_mnl(1,12)
+        3       tight_constraint_mnl(2,1)
+        3       tight_constraint_mnl(3,1)
+        3       tight_constraint_mnl(4,1)
+        3       tight_constraint_mnl(5,1)
+        3       tight_constraint_mnl(6,1)
+        3       tight_constraint_mnl(7,1)
+        3       tight_constraint_mnl(8,1)
+        3       tight_constraint_mnl(9,1)
+        3       tight_constraint_mnl(10,1)
+        3       tight_constraint_mnl(11,1)
+        3       tight_constraint_mnl(12,1)
+
+REMAINING 33 ENTRIES SKIPPED
+
+---- Xf  Xf(i) = 1 if order i has largest finish time
+
+Xf(1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       select_latest
+    10000       set_lf(1)
+
+Xf(2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       select_latest
+    10000       set_lf(2)
+
+Xf(3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       select_latest
+    10000       set_lf(3)
+
+REMAINING 9 ENTRIES SKIPPED
+
+---- Xs  Xs(i) = 1 if order i has smallest start time
+
+Xs(1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       select_earliest
+   -10000       set_es(1)
+
+Xs(2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       select_earliest
+   -10000       set_es(2)
+
+Xs(3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       select_earliest
+   -10000       set_es(3)
+
+REMAINING 9 ENTRIES SKIPPED
+
+---- s  start time of order i
+
+s(1)
+                (.LO, .L, .UP, .M = 2, 2, 36, 0)
+       -1       finish_time(1)
+       -1       finish_before_start(1,1)
+       -1       finish_before_start(2,1)
+       -1       finish_before_start(3,1)
+       -1       finish_before_start(4,1)
+       -1       finish_before_start(5,1)
+       -1       finish_before_start(6,1)
+       -1       finish_before_start(7,1)
+       -1       finish_before_start(8,1)
+       -1       finish_before_start(9,1)
+       -1       finish_before_start(10,1)
+       -1       finish_before_start(11,1)
+       -1       finish_before_start(12,1)
+        1       tight_constraint_fbs(1,1)
+        1       tight_constraint_fbs(2,1)
+        1       tight_constraint_fbs(3,1)
+        1       tight_constraint_fbs(4,1)
+        1       tight_constraint_fbs(5,1)
+        1       tight_constraint_fbs(6,1)
+        1       tight_constraint_fbs(7,1)
+        1       tight_constraint_fbs(8,1)
+        1       tight_constraint_fbs(9,1)
+        1       tight_constraint_fbs(10,1)
+        1       tight_constraint_fbs(11,1)
+        1       tight_constraint_fbs(12,1)
+       -1       confirm_es(1)
+       -1       set_es(1)
+        0       (OLD LEVEL ****)
+
+s(2)
+                (.LO, .L, .UP, .M = 3, 3, 33, 0)
+       -1       finish_time(2)
+       -1       finish_before_start(1,2)
+       -1       finish_before_start(2,2)
+       -1       finish_before_start(3,2)
+       -1       finish_before_start(4,2)
+       -1       finish_before_start(5,2)
+       -1       finish_before_start(6,2)
+       -1       finish_before_start(7,2)
+       -1       finish_before_start(8,2)
+       -1       finish_before_start(9,2)
+       -1       finish_before_start(10,2)
+       -1       finish_before_start(11,2)
+       -1       finish_before_start(12,2)
+        1       tight_constraint_fbs(1,2)
+        1       tight_constraint_fbs(2,2)
+        1       tight_constraint_fbs(3,2)
+        1       tight_constraint_fbs(4,2)
+        1       tight_constraint_fbs(5,2)
+        1       tight_constraint_fbs(6,2)
+        1       tight_constraint_fbs(7,2)
+        1       tight_constraint_fbs(8,2)
+        1       tight_constraint_fbs(9,2)
+        1       tight_constraint_fbs(10,2)
+        1       tight_constraint_fbs(11,2)
+        1       tight_constraint_fbs(12,2)
+       -1       confirm_es(2)
+       -1       set_es(2)
+        0       (OLD LEVEL ****)
+
+s(3)
+                (.LO, .L, .UP, .M = 4, 4, 31, 0)
+       -1       finish_time(3)
+       -1       finish_before_start(1,3)
+       -1       finish_before_start(2,3)
+       -1       finish_before_start(3,3)
+       -1       finish_before_start(4,3)
+       -1       finish_before_start(5,3)
+       -1       finish_before_start(6,3)
+       -1       finish_before_start(7,3)
+       -1       finish_before_start(8,3)
+       -1       finish_before_start(9,3)
+       -1       finish_before_start(10,3)
+       -1       finish_before_start(11,3)
+       -1       finish_before_start(12,3)
+        1       tight_constraint_fbs(1,3)
+        1       tight_constraint_fbs(2,3)
+        1       tight_constraint_fbs(3,3)
+        1       tight_constraint_fbs(4,3)
+        1       tight_constraint_fbs(5,3)
+        1       tight_constraint_fbs(6,3)
+        1       tight_constraint_fbs(7,3)
+        1       tight_constraint_fbs(8,3)
+        1       tight_constraint_fbs(9,3)
+        1       tight_constraint_fbs(10,3)
+        1       tight_constraint_fbs(11,3)
+        1       tight_constraint_fbs(12,3)
+       -1       confirm_es(3)
+       -1       set_es(3)
+        0       (OLD LEVEL ****)
+
+REMAINING 9 ENTRIES SKIPPED
+
+---- f  finish time of order i
+
+f(1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       finish_time(1)
+        1       process_end(1)
+        1       finish_before_start(1,1)
+        1       finish_before_start(1,2)
+        1       finish_before_start(1,3)
+        1       finish_before_start(1,4)
+        1       finish_before_start(1,5)
+        1       finish_before_start(1,6)
+        1       finish_before_start(1,7)
+        1       finish_before_start(1,8)
+        1       finish_before_start(1,9)
+        1       finish_before_start(1,10)
+        1       finish_before_start(1,11)
+        1       finish_before_start(1,12)
+       -1       tight_constraint_fbs(1,1)
+       -1       tight_constraint_fbs(1,2)
+       -1       tight_constraint_fbs(1,3)
+       -1       tight_constraint_fbs(1,4)
+       -1       tight_constraint_fbs(1,5)
+       -1       tight_constraint_fbs(1,6)
+       -1       tight_constraint_fbs(1,7)
+       -1       tight_constraint_fbs(1,8)
+       -1       tight_constraint_fbs(1,9)
+       -1       tight_constraint_fbs(1,10)
+       -1       tight_constraint_fbs(1,11)
+       -1       tight_constraint_fbs(1,12)
+       -1       confirm_lf(1)
+       -1       set_lf(1)
+
+f(2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       finish_time(2)
+        1       process_end(2)
+        1       finish_before_start(2,1)
+        1       finish_before_start(2,2)
+        1       finish_before_start(2,3)
+        1       finish_before_start(2,4)
+        1       finish_before_start(2,5)
+        1       finish_before_start(2,6)
+        1       finish_before_start(2,7)
+        1       finish_before_start(2,8)
+        1       finish_before_start(2,9)
+        1       finish_before_start(2,10)
+        1       finish_before_start(2,11)
+        1       finish_before_start(2,12)
+       -1       tight_constraint_fbs(2,1)
+       -1       tight_constraint_fbs(2,2)
+       -1       tight_constraint_fbs(2,3)
+       -1       tight_constraint_fbs(2,4)
+       -1       tight_constraint_fbs(2,5)
+       -1       tight_constraint_fbs(2,6)
+       -1       tight_constraint_fbs(2,7)
+       -1       tight_constraint_fbs(2,8)
+       -1       tight_constraint_fbs(2,9)
+       -1       tight_constraint_fbs(2,10)
+       -1       tight_constraint_fbs(2,11)
+       -1       tight_constraint_fbs(2,12)
+       -1       confirm_lf(2)
+       -1       set_lf(2)
+
+f(3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       finish_time(3)
+        1       process_end(3)
+        1       finish_before_start(3,1)
+        1       finish_before_start(3,2)
+        1       finish_before_start(3,3)
+        1       finish_before_start(3,4)
+        1       finish_before_start(3,5)
+        1       finish_before_start(3,6)
+        1       finish_before_start(3,7)
+        1       finish_before_start(3,8)
+        1       finish_before_start(3,9)
+        1       finish_before_start(3,10)
+        1       finish_before_start(3,11)
+        1       finish_before_start(3,12)
+       -1       tight_constraint_fbs(3,1)
+       -1       tight_constraint_fbs(3,2)
+       -1       tight_constraint_fbs(3,3)
+       -1       tight_constraint_fbs(3,4)
+       -1       tight_constraint_fbs(3,5)
+       -1       tight_constraint_fbs(3,6)
+       -1       tight_constraint_fbs(3,7)
+       -1       tight_constraint_fbs(3,8)
+       -1       tight_constraint_fbs(3,9)
+       -1       tight_constraint_fbs(3,10)
+       -1       tight_constraint_fbs(3,11)
+       -1       tight_constraint_fbs(3,12)
+       -1       confirm_lf(3)
+       -1       set_lf(3)
+
+REMAINING 9 ENTRIES SKIPPED
+
+---- C  number of orders scheduled after order i on the same machine
+
+C(1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       n_following_orders(1)
+        1       setY(1,2)
+        1       setY(1,3)
+        1       setY(1,4)
+        1       setY(1,5)
+        1       setY(1,6)
+        1       setY(1,7)
+        1       setY(1,8)
+        1       setY(1,9)
+        1       setY(1,10)
+        1       setY(1,11)
+        1       setY(1,12)
+       -1       setY(2,1)
+       -1       setY(3,1)
+       -1       setY(4,1)
+       -1       setY(5,1)
+       -1       setY(6,1)
+       -1       setY(7,1)
+       -1       setY(8,1)
+       -1       setY(9,1)
+       -1       setY(10,1)
+       -1       setY(11,1)
+       -1       setY(12,1)
+       -1       tc_setY(1,2)
+       -1       tc_setY(1,3)
+       -1       tc_setY(1,4)
+       -1       tc_setY(1,5)
+       -1       tc_setY(1,6)
+       -1       tc_setY(1,7)
+       -1       tc_setY(1,8)
+       -1       tc_setY(1,9)
+       -1       tc_setY(1,10)
+       -1       tc_setY(1,11)
+       -1       tc_setY(1,12)
+        1       tc_setY(2,1)
+        1       tc_setY(3,1)
+        1       tc_setY(4,1)
+        1       tc_setY(5,1)
+        1       tc_setY(6,1)
+        1       tc_setY(7,1)
+        1       tc_setY(8,1)
+        1       tc_setY(9,1)
+        1       tc_setY(10,1)
+        1       tc_setY(11,1)
+        1       tc_setY(12,1)
+       -1       setYp(1,2)
+       -1       setYp(1,3)
+       -1       setYp(1,4)
+       -1       setYp(1,5)
+       -1       setYp(1,6)
+       -1       setYp(1,7)
+       -1       setYp(1,8)
+       -1       setYp(1,9)
+       -1       setYp(1,10)
+       -1       setYp(1,11)
+       -1       setYp(1,12)
+        1       setYp(2,1)
+        1       setYp(3,1)
+        1       setYp(4,1)
+        1       setYp(5,1)
+        1       setYp(6,1)
+        1       setYp(7,1)
+        1       setYp(8,1)
+        1       setYp(9,1)
+        1       setYp(10,1)
+        1       setYp(11,1)
+        1       setYp(12,1)
+        1       tc_setYp(1,2)
+        1       tc_setYp(1,3)
+        1       tc_setYp(1,4)
+        1       tc_setYp(1,5)
+        1       tc_setYp(1,6)
+        1       tc_setYp(1,7)
+        1       tc_setYp(1,8)
+        1       tc_setYp(1,9)
+        1       tc_setYp(1,10)
+        1       tc_setYp(1,11)
+        1       tc_setYp(1,12)
+       -1       tc_setYp(2,1)
+       -1       tc_setYp(3,1)
+       -1       tc_setYp(4,1)
+       -1       tc_setYp(5,1)
+       -1       tc_setYp(6,1)
+       -1       tc_setYp(7,1)
+       -1       tc_setYp(8,1)
+       -1       tc_setYp(9,1)
+       -1       tc_setYp(10,1)
+       -1       tc_setYp(11,1)
+       -1       tc_setYp(12,1)
+
+C(2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       n_following_orders(2)
+       -1       setY(1,2)
+        1       setY(2,1)
+        1       setY(2,3)
+        1       setY(2,4)
+        1       setY(2,5)
+        1       setY(2,6)
+        1       setY(2,7)
+        1       setY(2,8)
+        1       setY(2,9)
+        1       setY(2,10)
+        1       setY(2,11)
+        1       setY(2,12)
+       -1       setY(3,2)
+       -1       setY(4,2)
+       -1       setY(5,2)
+       -1       setY(6,2)
+       -1       setY(7,2)
+       -1       setY(8,2)
+       -1       setY(9,2)
+       -1       setY(10,2)
+       -1       setY(11,2)
+       -1       setY(12,2)
+        1       tc_setY(1,2)
+       -1       tc_setY(2,1)
+       -1       tc_setY(2,3)
+       -1       tc_setY(2,4)
+       -1       tc_setY(2,5)
+       -1       tc_setY(2,6)
+       -1       tc_setY(2,7)
+       -1       tc_setY(2,8)
+       -1       tc_setY(2,9)
+       -1       tc_setY(2,10)
+       -1       tc_setY(2,11)
+       -1       tc_setY(2,12)
+        1       tc_setY(3,2)
+        1       tc_setY(4,2)
+        1       tc_setY(5,2)
+        1       tc_setY(6,2)
+        1       tc_setY(7,2)
+        1       tc_setY(8,2)
+        1       tc_setY(9,2)
+        1       tc_setY(10,2)
+        1       tc_setY(11,2)
+        1       tc_setY(12,2)
+        1       setYp(1,2)
+       -1       setYp(2,1)
+       -1       setYp(2,3)
+       -1       setYp(2,4)
+       -1       setYp(2,5)
+       -1       setYp(2,6)
+       -1       setYp(2,7)
+       -1       setYp(2,8)
+       -1       setYp(2,9)
+       -1       setYp(2,10)
+       -1       setYp(2,11)
+       -1       setYp(2,12)
+        1       setYp(3,2)
+        1       setYp(4,2)
+        1       setYp(5,2)
+        1       setYp(6,2)
+        1       setYp(7,2)
+        1       setYp(8,2)
+        1       setYp(9,2)
+        1       setYp(10,2)
+        1       setYp(11,2)
+        1       setYp(12,2)
+       -1       tc_setYp(1,2)
+        1       tc_setYp(2,1)
+        1       tc_setYp(2,3)
+        1       tc_setYp(2,4)
+        1       tc_setYp(2,5)
+        1       tc_setYp(2,6)
+        1       tc_setYp(2,7)
+        1       tc_setYp(2,8)
+        1       tc_setYp(2,9)
+        1       tc_setYp(2,10)
+        1       tc_setYp(2,11)
+        1       tc_setYp(2,12)
+       -1       tc_setYp(3,2)
+       -1       tc_setYp(4,2)
+       -1       tc_setYp(5,2)
+       -1       tc_setYp(6,2)
+       -1       tc_setYp(7,2)
+       -1       tc_setYp(8,2)
+       -1       tc_setYp(9,2)
+       -1       tc_setYp(10,2)
+       -1       tc_setYp(11,2)
+       -1       tc_setYp(12,2)
+
+C(3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       n_following_orders(3)
+       -1       setY(1,3)
+       -1       setY(2,3)
+        1       setY(3,1)
+        1       setY(3,2)
+        1       setY(3,4)
+        1       setY(3,5)
+        1       setY(3,6)
+        1       setY(3,7)
+        1       setY(3,8)
+        1       setY(3,9)
+        1       setY(3,10)
+        1       setY(3,11)
+        1       setY(3,12)
+       -1       setY(4,3)
+       -1       setY(5,3)
+       -1       setY(6,3)
+       -1       setY(7,3)
+       -1       setY(8,3)
+       -1       setY(9,3)
+       -1       setY(10,3)
+       -1       setY(11,3)
+       -1       setY(12,3)
+        1       tc_setY(1,3)
+        1       tc_setY(2,3)
+       -1       tc_setY(3,1)
+       -1       tc_setY(3,2)
+       -1       tc_setY(3,4)
+       -1       tc_setY(3,5)
+       -1       tc_setY(3,6)
+       -1       tc_setY(3,7)
+       -1       tc_setY(3,8)
+       -1       tc_setY(3,9)
+       -1       tc_setY(3,10)
+       -1       tc_setY(3,11)
+       -1       tc_setY(3,12)
+        1       tc_setY(4,3)
+        1       tc_setY(5,3)
+        1       tc_setY(6,3)
+        1       tc_setY(7,3)
+        1       tc_setY(8,3)
+        1       tc_setY(9,3)
+        1       tc_setY(10,3)
+        1       tc_setY(11,3)
+        1       tc_setY(12,3)
+        1       setYp(1,3)
+        1       setYp(2,3)
+       -1       setYp(3,1)
+       -1       setYp(3,2)
+       -1       setYp(3,4)
+       -1       setYp(3,5)
+       -1       setYp(3,6)
+       -1       setYp(3,7)
+       -1       setYp(3,8)
+       -1       setYp(3,9)
+       -1       setYp(3,10)
+       -1       setYp(3,11)
+       -1       setYp(3,12)
+        1       setYp(4,3)
+        1       setYp(5,3)
+        1       setYp(6,3)
+        1       setYp(7,3)
+        1       setYp(8,3)
+        1       setYp(9,3)
+        1       setYp(10,3)
+        1       setYp(11,3)
+        1       setYp(12,3)
+       -1       tc_setYp(1,3)
+       -1       tc_setYp(2,3)
+        1       tc_setYp(3,1)
+        1       tc_setYp(3,2)
+        1       tc_setYp(3,4)
+        1       tc_setYp(3,5)
+        1       tc_setYp(3,6)
+        1       tc_setYp(3,7)
+        1       tc_setYp(3,8)
+        1       tc_setYp(3,9)
+        1       tc_setYp(3,10)
+        1       tc_setYp(3,11)
+        1       tc_setYp(3,12)
+       -1       tc_setYp(4,3)
+       -1       tc_setYp(5,3)
+       -1       tc_setYp(6,3)
+       -1       tc_setYp(7,3)
+       -1       tc_setYp(8,3)
+       -1       tc_setYp(9,3)
+       -1       tc_setYp(10,3)
+       -1       tc_setYp(11,3)
+       -1       tc_setYp(12,3)
+
+REMAINING 9 ENTRIES SKIPPED
+
+---- lf  largest finish time
+
+lf
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -1       makespan_obj
+        1       confirm_lf(1)
+        1       confirm_lf(2)
+        1       confirm_lf(3)
+        1       confirm_lf(4)
+        1       confirm_lf(5)
+        1       confirm_lf(6)
+        1       confirm_lf(7)
+        1       confirm_lf(8)
+        1       confirm_lf(9)
+        1       confirm_lf(10)
+        1       confirm_lf(11)
+        1       confirm_lf(12)
+        1       set_lf(1)
+        1       set_lf(2)
+        1       set_lf(3)
+        1       set_lf(4)
+        1       set_lf(5)
+        1       set_lf(6)
+        1       set_lf(7)
+        1       set_lf(8)
+        1       set_lf(9)
+        1       set_lf(10)
+        1       set_lf(11)
+        1       set_lf(12)
+
+
+---- es  earliest start time
+
+es
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       makespan_obj
+        1       confirm_es(1)
+        1       confirm_es(2)
+        1       confirm_es(3)
+        1       confirm_es(4)
+        1       confirm_es(5)
+        1       confirm_es(6)
+        1       confirm_es(7)
+        1       confirm_es(8)
+        1       confirm_es(9)
+        1       confirm_es(10)
+        1       confirm_es(11)
+        1       confirm_es(12)
+        1       set_es(1)
+        1       set_es(2)
+        1       set_es(3)
+        1       set_es(4)
+        1       set_es(5)
+        1       set_es(6)
+        1       set_es(7)
+        1       set_es(8)
+        1       set_es(9)
+        1       set_es(10)
+        1       set_es(11)
+        1       set_es(12)
+
+
+---- p_cost  processing cost
+
+p_cost
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       cost_obj
+
+
+---- makespan  
+
+makespan
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       makespan_obj
+
+
+---- p_time  processing time
+
+p_time
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       ptime_obj
+
+GAMS 40.1.1  23eb37fb Aug 16, 2022          WEX-WEI x86 64bit/MS Windows - 12/05/22 19:10:47 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE jssp Using MIP From line 339
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 1.000E+00, 2.000E+04] - Zero values observed as well
+Bound     [min, max] : [ 1.000E+00, 3.900E+01] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 2.000E+04]
+
+GAMS 40.1.1  23eb37fb Aug 16, 2022          WEX-WEI x86 64bit/MS Windows - 12/05/22 19:10:47 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE jssp Using MIP From line 339
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS          26     SINGLE EQUATIONS        1,973
+BLOCKS OF VARIABLES          17     SINGLE VARIABLES          965  12 projected
+NON ZERO ELEMENTS         8,009     DISCRETE VARIABLES        962
+
+
+GENERATION TIME      =        0.016 SECONDS      5 MB  40.1.1 23eb37fb WEX-WEI
+GAMS 40.

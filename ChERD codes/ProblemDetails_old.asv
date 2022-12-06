@@ -1,0 +1,7 @@
+function [lb, ub, FITNESSFCN] = ProblemDetails_old(problem_no)
+
+[nbMachines,nbJobs,duration,release,due,~] = ProblemData(problem_no);
+lb = [ones(nbJobs , 1) ; release']';
+ub = [nbMachines*ones(nbJobs , 1) ; due' - min(duration,[],2)]';
+
+end

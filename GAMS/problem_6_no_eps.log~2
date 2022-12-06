@@ -1,0 +1,171 @@
+
+--- Job problem_6_no_eps.gms Start 12/04/22 17:17:11 40.1.1 23eb37fb WEX-WEI x86 64bit/MS Windows
+--- Applying:
+    D:\GAMS\40\gmsprmNT.txt
+--- GAMS Parameters defined
+    Input D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\problem_6_no_eps.gms
+    PageSize 0
+    ScrDir D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\225i\
+    SysDir D:\GAMS\40\
+    LogOption 3
+    ErrMsg 1
+    ErrorLog 99
+    IDE 1
+    GDX D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\problem_6_no_eps.gdx
+    LstTitleLeftAligned 1
+Licensee: GAMS Demo license for Omkar Chaudhari          G220821|0002CO-GEN
+          Indian Institute of Technology, India                    DL072038
+          D:\GAMS\40\gamslice.txt
+          c.omkar@iitg.ac.in, Omkar Chaudhari                              
+          Demo license for demonstration and instructional purposes only
+Processor information: 1 socket(s), 4 core(s), and 8 thread(s) available
+GAMS 40.1.1   Copyright (C) 1987-2022 GAMS Development. All rights reserved
+--- Starting compilation
+--- problem_6_no_eps.gms(2) 2 Mb
+--- call =xls2gms r=Sheet6!b6:b17 i=test_data.xlsx o=set1.inc
+--- problem_6_no_eps.gms(3) 2 Mb
+--- . set1.inc(23) 3 Mb
+--- problem_6_no_eps.gms(6) 3 Mb
+--- call =xls2gms r=Sheet6!c5:e5 s="," i=test_data.xlsx o=set2.inc
+--- problem_6_no_eps.gms(7) 3 Mb
+--- . set2.inc(12) 3 Mb
+--- problem_6_no_eps.gms(13) 3 Mb
+--- call =xls2gms r=Sheet6!g6:h17 i=test_data.xlsx o=par1.inc
+--- problem_6_no_eps.gms(14) 3 Mb
+--- . par1.inc(23) 3 Mb
+--- problem_6_no_eps.gms(17) 3 Mb
+--- call =xls2gms r=Sheet6!j6:k17 i=test_data.xlsx o=par2.inc
+--- problem_6_no_eps.gms(18) 3 Mb
+--- . par2.inc(23) 3 Mb
+--- problem_6_no_eps.gms(21) 3 Mb
+--- call =xls2gms r=Sheet6!a21:b23 i=test_data.xlsx o=par3.inc
+--- problem_6_no_eps.gms(22) 3 Mb
+--- . par3.inc(14) 3 Mb
+--- problem_6_no_eps.gms(27) 3 Mb
+--- call =xls2gms r=Sheet6!b5:e17 i=test_data.xlsx o=tab1.inc
+--- problem_6_no_eps.gms(28) 3 Mb
+--- . tab1.inc(24) 3 Mb
+--- problem_6_no_eps.gms(33) 3 Mb
+--- call =xls2gms r=Sheet6!b20:e32 i=test_data.xlsx o=tab2.inc
+--- problem_6_no_eps.gms(34) 3 Mb
+--- . tab2.inc(24) 3 Mb
+--- problem_6_no_eps.gms(39) 3 Mb
+--- call =xls2gms r=Sheet6!g20:j32 i=test_data.xlsx o=tab3.inc
+--- problem_6_no_eps.gms(40) 3 Mb
+--- . tab3.inc(24) 3 Mb
+--- problem_6_no_eps.gms(173) 3 Mb
+--- Starting execution: elapsed 0:00:45.998
+--- problem_6_no_eps.gms(240) 4 Mb
+--- Generating MIP model jssp
+--- problem_6_no_eps.gms(339) 5 Mb
+---   1,973 rows  965 columns  7,937 non-zeroes
+---   962 discrete-columns
+--- Range statistics (absolute non-zero finite values)
+--- RHS       [min, max] : [ 1.000E+00, 2.000E+04] - Zero values observed as well
+--- Bound     [min, max] : [ 1.000E+00, 3.900E+01] - Zero values observed as well
+--- Matrix    [min, max] : [ 1.000E+00, 2.000E+04]
+--- Executing CPLEX (Solvelink=2): elapsed 0:00:46.007
+
+IBM ILOG CPLEX   40.1.1 23eb37fb Aug 16, 2022          WEI x86 64bit/MS Window
+
+--- *** This solver runs with a demo license. No commercial use.
+--- GMO setup time: 0.00s
+--- Space for names approximately 0.07 Mb
+--- Use option 'names no' to turn use of names off
+--- GMO memory 0.83 Mb (peak 0.84 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.0.0 link memory 0.04 Mb (peak 0.22 Mb)
+--- Starting Cplex
+
+Version identifier: 22.1.0.0 | 2022-03-09 | 1a383f8ce
+CPXPARAM_Advance                                 0
+CPXPARAM_Threads                                 1
+CPXPARAM_MIP_Display                             4
+CPXPARAM_MIP_Pool_Capacity                       0
+CPXPARAM_MIP_Tolerances_AbsMIPGap                0
+Generic callback                                 0x50
+Tried aggregator 2 times.
+MIP Presolve eliminated 200 rows and 51 columns.
+MIP Presolve modified 5052 coefficients.
+Aggregator did 12 substitutions.
+Reduced MIP has 1760 rows, 902 columns, and 6776 nonzeros.
+Reduced MIP has 864 binaries, 38 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.02 sec. (7.44 ticks)
+Found incumbent of value 93.000000 after 0.02 sec. (13.13 ticks)
+Probing time = 0.00 sec. (2.61 ticks)
+Tried aggregator 1 time.
+Detecting symmetries...
+MIP Presolve modified 48 coefficients.
+Reduced MIP has 1760 rows, 902 columns, and 6776 nonzeros.
+Reduced MIP has 864 binaries, 38 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.02 sec. (4.43 ticks)
+Probing time = 0.00 sec. (2.55 ticks)
+Clique table members: 1794.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: none, using 1 thread.
+Tried aggregator 1 time.
+LP Presolve eliminated 144 rows and 12 columns.
+Aggregator did 132 substitutions.
+Reduced LP has 1484 rows, 758 columns, and 5408 nonzeros.
+Presolve time = 0.00 sec. (1.14 ticks)
+Initializing dual steep norms . . .
+
+Iteration log . . .
+Iteration:     1   Dual objective     =            78.000000
+Perturbation started.
+Iteration:    51   Dual objective     =            78.000000
+Iteration:   241   Dual objective     =            78.000023
+Removing perturbation.
+Initializing dual steep norms . . .
+
+Iteration log . . .
+Iteration:     1   Dual objective     =            78.000000
+Root relaxation solution time = 0.00 sec. (11.38 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                           93.0000        0.0000           100.00%
+Found incumbent of value 93.000000 after 0.03 sec. (37.88 ticks)
+      0     0       78.0000   136       93.0000       78.0000      303   16.13%
+      0     0       78.0000   332       93.0000     Cuts: 472      863   16.13%
+      0     0       78.0000   248       93.0000       Cuts: 5      918   16.13%
+      0     0       78.0000   319       93.0000     Cuts: 127     1216   16.13%
+Detecting symmetries...
+      0     2       78.0000   319       93.0000       78.0000     1216   16.13%
+Elapsed time = 0.24 sec. (321.58 ticks, tree = 0.01 MB)
+     21    21       78.0000   244       93.0000       78.0000     4897   16.13%
+     42    32       78.3241   258       93.0000       78.0000     8048   16.13%
+                                                 Impl Bds: 15                  
+     60    46       80.0000   198       93.0000       78.0000    11040   16.13%
+                                                     Cuts: 11                  
+     82    62       81.0000   181       93.0000       78.0000    14289   16.13%
+                                                  Impl Bds: 8                  
+    116    86       84.0000   259       93.0000       78.0000    17490   16.13%
+                                                  Impl Bds: 3                  
+    150   114       78.1778   180       93.0000       78.0000    20296   16.13%
+                                                  Impl Bds: 4                  
+    189   141       79.3333   154       93.0000       78.0000    24005   16.13%
+                                                 Impl Bds: 17                  
+    242   178       78.1848   189       93.0000       78.0000    27582   16.13%
+                                                 Impl Bds: 13                  
+    286   208       78.2144   199       93.0000       78.0000    31682   16.13%
+                                                 Impl Bds: 10                  
+    476   314       78.0000   137       93.0000       78.0000    45934   16.13%
+                                                     Cuts: 57                  
+Elapsed time = 2.53 sec. (3494.19 ticks, tree = 0.34 MB)
+*   552   342      integral     0       90.0000       78.0000    51127   13.33%
+                                                  Impl Bds: 2                  
+Found incumbent of value 90.000000 after 2.77 sec. (3813.11 ticks)
+*   580   354      integral     0       89.0000       78.0000    53573   12.36%
+                                                    Covers: 5                  
+Found incumbent of value 89.000000 after 2.88 sec. (3950.89 ticks)
+    680   413       78.0000   121       89.0000       78.0000    62438   12.36%
+                                                     Cuts: 11                  
+    883   510       80.0000   118       89.0000       78.0000    78951   12.36%
+                                                     Cuts: 13                  
+   1041   566       78.0000    92       89.0000       78.0000    96233   12.36%
+                                                      Cuts: 5                  
+   1217   621       78.3059   184       89.0000       78.0000   113066   12.36%
+                                                      Cuts: 9                  

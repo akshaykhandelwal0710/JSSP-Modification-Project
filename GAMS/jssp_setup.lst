@@ -1,0 +1,1911 @@
+GAMS 40.1.1  23eb37fb Aug 16, 2022          WEX-WEI x86 64bit/MS Windows - 12/02/22 20:48:56 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  Set
+   2      i /1, 2, 3, 4, 5/
+   3      j /1, 2, 3/;
+   4  Alias (i,ip);
+   5  Parameter
+   6      r(i)
+   7      /1 1
+   8      2 1
+   9      3 1
+  10      4 30
+  11      5 60/
+  12      d(i)
+  13      /1 3
+  14      2 4
+  15      3 4
+  16      4 90
+  17      5 120/
+  18      id(j)
+  19      /1 1
+  20      2 2
+  21      3 3/;
+  22   
+  23  Table
+  24   p(i,j)
+  25      1   2   3
+  26  1   2   2   3
+  27  2   3   2   3
+  28  3   1   2   3
+  29  4   1   2   3
+  30  5   1   2   3;
+  31   
+  32  Table
+  33  cost(i, j)
+  34      1   2   3
+  35  1   1   2   3
+  36  2   1   2   3
+  37  3   1   2   3
+  38  4   1   2   3
+  39  5   1   2   3;
+  40   
+  41  Table
+  42   setup(i,ip)
+  43      1   2   3   4   5
+  44  1   1   1   1   1   1
+  45  2   1   1   1   1   1
+  46  3   1   1   1   1   1
+  47  4   1   1   1   1   1
+  48  5   1   1   1   1   1;
+  49   
+  50  Binary Variables
+  51   
+  52  A(i, ip) 'order i occurs on a machine with number less than or equal to that of ip'
+  53  B(i, ip) 'order i finishes before or at start time of ip with setup time required if i is processed before ip in between'
+  54  Z(i, ip) 'order i and ip on same machine and i finishes at or before ip'
+  55  Y(i, ip) 'no of orders after i on m_i - no of orders after ip on m_ip >= 1'
+  56  Yp(i, ip) 'no of orders after i on m_i - no of orders after ip on m_ip <= 1'
+  57  adj(i, ip) 'order ip is the order next after i on the same machine'
+  58  m(i, j) 'order i occurs on machine j'
+  59  Xf(i) 'Xf(i) = 1 if order i has largest finish time'
+  60  Xs(i) 'Xs(i) = 1 if order i has smallest start time'
+  61  ;
+  62   
+  63  Integer Variable
+  64  s(i) 'start time of order i'
+  65  f(i) 'finish time of order i'
+  66  C(i) 'number of orders scheduled after order i on the same machine'
+  67  lf 'largest finish time'
+  68  es 'earliest start time'
+  69  ;
+  70   
+  71  Variable
+  72  p_cost 'processing cost'
+  73  makespan
+  74  p_time 'processing time'
+  75  ;
+  76   
+  77  Scalar U /10000/;
+  78   
+  79  s.lo(i) = r(i);
+  80  s.up(i) = d(i);
+  81   
+  82  Equation
+  83      cost_obj
+  84      ptime_obj
+  85      makespan_obj
+  86   
+  87      finish_time(i)
+  88      mac_con(i)
+  89      process_end(i)
+  90   
+  91      finish_before_start(i,ip)
+  92      tight_constraint_fbs(i, ip)
+  93      machine_num_lesseq(i,ip)
+  94      tight_constraint_mnl(i, ip)
+  95      overlap(i,ip)
+  96   
+  97      finish_before_start_and_same_mac(i,ip)
+  98      tc_fbssm(i,ip)
+  99      n_following_orders(i)
+ 100      setY(i,ip)
+ 101      tc_setY(i,ip)
+ 102      setYp(i,ip)
+ 103      tc_setYp(i,ip)
+ 104      adj_nextorder_same_mac(i,ip)
+ 105      tc_nosm(i,ip)
+ 106   
+ 107      select_latest
+ 108      select_earliest
+ 109      confirm_lf(i)
+ 110      set_lf(i)
+ 111      confirm_es(i)
+ 112      set_es(i)
+ 113   
+ 114  ;
+ 115   
+ 116  * total cost = summation of cost of processing order i on machine m(i)
+ 117  cost_obj.. p_cost =e= sum((i,j), cost(i, j)*m(i, j));
+ 118   
+ 119  * p_time = summation of processing times of order i on machine m(i)
+ 120  ptime_obj.. p_time =e= sum((i, j), p(i, j)*m(i, j));
+ 121   
+ 122  * makespan = largest finish time - earliest start time
+ 123  makespan_obj.. makespan =e= lf - es;
+ 124   
+ 125  * finish_time of order i = start time of order i + processing time of order i on machine m(i)
+ 126  finish_time(i).. f(i) =e= s(i) + sum(j, p(i, j)*m(i, j)) ;
+ 127   
+ 128  * every order operates on exactly one machine
+ 129  mac_con(i).. sum(j, m(i, j)) =e= 1;
+ 130   
+ 131  *every order should finish before its due date d(i)
+ 132  process_end(i).. f(i) =l= d(i);
+ 133   
+ 134  * set B(i, ip) =1 iff order i finishes before or at start time of ip with setup time required if i is processed before ip in between
+ 135  finish_before_start(i,ip).. f(i)+ adj(i,ip)*setup(i,ip) =l= s(ip) + U*(1-B(i,ip));
+ 136  tight_constraint_fbs(i, ip)..  1 + s(ip) =l= f(i)+adj(i,ip)*setup(i,ip) + U*B(i,ip);
+ 137   
+ 138  *set A(i, ip) = 1 iff order i occurs on a machine with number less than or equal to that of ip
+ 139  machine_num_lesseq(i,ip).. sum(j, m(i,j)*id(j)) - sum(j, m(ip,j)*id(j)) =l= U*(1 - A(i,ip));
+ 140  tight_constraint_mnl(i, ip).. 1 + sum(j, m(ip,j)*id(j)) =l= U*A(i,ip) + sum(j, m(i,j)*id(j)) ;
+ 141   
+ 142  * if order i and ip are operating on the same machine, then either i should finish before ip or ip should finish before i
+ 143  overlap(i,ip).. 1 $ (not sameAs(i,ip)) =l= B(ip,i)+ B(i,ip)+ U*(1 - (A(i,ip) + A(ip,i) - 1));
+ 144   
+ 145  * set Z(i , ip) = 1 iff order i and ip on same machine and i finishes at or before ip
+ 146  finish_before_start_and_same_mac(i,ip).. ((B(i,ip) + (A(i,ip) + A(ip,i) - 1)) - 1) =l= U*Z(i,ip);
+ 147  tc_fbssm(i,ip).. 1 =l= ((B(i,ip) + (A(i,ip) + A(ip,i) - 1)) - 1) + U*(1 - Z(i,ip));
+ 148   
+ 149  * C(i) = number of orders after order i on the same machine
+ 150  n_following_orders(i).. C(i) =e= sum(ip, Z(i, ip)) - Z(i,i);
+ 151   
+ 152  * set Y(i, ip) = 1 iff no of orders after i on m_i - no of orders after ip on m_ip >= 1
+ 153  setY(i,ip).. C(i) - C(ip) =l= U*Y(i,ip);
+ 154  tc_setY(i,ip).. 1 =l= C(i) - C(ip) + U*(1 - Y(i,ip));
+ 155   
+ 156  * set Yp(i, ip) = 1 iff no of orders after i on m_i - no of orders after ip on m_ip <= 1
+ 157  setYp(i,ip).. 2 =l= U*Yp(i,ip) + C(i) - C(ip);
+ 158  tc_setYp(i,ip).. C(i) - C(ip) =l= 1+ U*(1 - Yp(i,ip));
+ 159   
+ 160  * set adj(i, ip) = 1 iff order ip is the order next after i on the same machine
+ 161  adj_nextorder_same_mac(i,ip).. (((Y(i,ip) + Yp(i,ip) - 1) + (A(i,ip) + A(ip,i) - 1)) - 1) =l= U*adj(i,ip);
+ 162  tc_nosm(i,ip).. 1 =l= (((Y(i,ip) + Yp(i,ip)- 1) + (A(i,ip) + A(ip,i) - 1)) - 1) + U*(1 - adj(i,ip));
+ 163   
+ 164   
+ 165  * summation of Xf(i) = summation of Xs(i) = 1, to select the latest and the earliest order respectively
+ 166  select_latest.. sum(i, Xf(i)) =e= 1;
+ 167  select_earliest.. sum(i, Xs(i)) =e= 1;
+ 168   
+ 169  *confirming lf, es
+ 170  confirm_lf(i).. lf =g= f(i);
+ 171  confirm_es(i).. es =l= s(i);
+ 172   
+ 173  * setting lf, es
+ 174  set_lf(i).. lf =l= U*(1 - Xf(i)) + f(i);
+ 175  set_es(i).. es + U*(1 - Xs(i)) =g= s(i);
+ 176   
+ 177   
+ 178  Model jssp /all/;
+ 179  solve jssp using mip minimizing p_cost;
+ 180  display  A.l, B.l,s.l, f.l, m.l, Y.l, C.l, Yp.l;
+
+
+COMPILATION TIME     =        0.062 SECONDS      3 MB  40.1.1 23eb37fb WEX-WEI
+GAMS 40.1.1  23eb37fb Aug 16, 2022          WEX-WEI x86 64bit/MS Windows - 12/02/22 20:48:56 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE jssp Using MIP From line 179
+
+
+---- cost_obj  =E=  
+
+cost_obj..  - m(1,1) - 2*m(1,2) - 3*m(1,3) - m(2,1) - 2*m(2,2) - 3*m(2,3) - m(3,1) - 2*m(3,2) - 3*m(3,3) - m(4,1) - 2*m(4,2) - 3*m(4,3) - m(5,1) - 2*m(5,2) - 3*m(5,3) + p_cost =E= 0 ; (LHS = 0)
+     
+
+---- ptime_obj  =E=  
+
+ptime_obj..  - 2*m(1,1) - 2*m(1,2) - 3*m(1,3) - 3*m(2,1) - 2*m(2,2) - 3*m(2,3) - m(3,1) - 2*m(3,2) - 3*m(3,3) - m(4,1) - 2*m(4,2) - 3*m(4,3) - m(5,1) - 2*m(5,2) - 3*m(5,3) + p_time =E= 0 ; (LHS = 0)
+     
+
+---- makespan_obj  =E=  
+
+makespan_obj..  - lf + es + makespan =E= 0 ; (LHS = 0)
+     
+
+---- finish_time  =E=  
+
+finish_time(1)..  - 2*m(1,1) - 2*m(1,2) - 3*m(1,3) - s(1) + f(1) =E= 0 ; (LHS = -1, INFES = 1 ****)
+     
+finish_time(2)..  - 3*m(2,1) - 2*m(2,2) - 3*m(2,3) - s(2) + f(2) =E= 0 ; (LHS = -1, INFES = 1 ****)
+     
+finish_time(3)..  - m(3,1) - 2*m(3,2) - 3*m(3,3) - s(3) + f(3) =E= 0 ; (LHS = -1, INFES = 1 ****)
+     
+REMAINING 2 ENTRIES SKIPPED
+
+
+---- mac_con  =E=  
+
+mac_con(1)..  m(1,1) + m(1,2) + m(1,3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+mac_con(2)..  m(2,1) + m(2,2) + m(2,3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+mac_con(3)..  m(3,1) + m(3,2) + m(3,3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+REMAINING 2 ENTRIES SKIPPED
+
+
+---- process_end  =L=  
+
+process_end(1)..  f(1) =L= 3 ; (LHS = 0)
+     
+process_end(2)..  f(2) =L= 4 ; (LHS = 0)
+     
+process_end(3)..  f(3) =L= 4 ; (LHS = 0)
+     
+REMAINING 2 ENTRIES SKIPPED
+
+
+---- finish_before_start  =L=  
+
+finish_before_start(1,1)..  10000*B(1,1) + adj(1,1) - s(1) + f(1) =L= 10000 ; (LHS = -1)
+     
+finish_before_start(1,2)..  10000*B(1,2) + adj(1,2) - s(2) + f(1) =L= 10000 ; (LHS = -1)
+     
+finish_before_start(1,3)..  10000*B(1,3) + adj(1,3) - s(3) + f(1) =L= 10000 ; (LHS = -1)
+     
+REMAINING 22 ENTRIES SKIPPED
+
+
+---- tight_constraint_fbs  =L=  
+
+tight_constraint_fbs(1,1)..  - 10000*B(1,1) - adj(1,1) + s(1) - f(1) =L= -1 ; (LHS = 1, INFES = 2 ****)
+     
+tight_constraint_fbs(1,2)..  - 10000*B(1,2) - adj(1,2) + s(2) - f(1) =L= -1 ; (LHS = 1, INFES = 2 ****)
+     
+tight_constraint_fbs(1,3)..  - 10000*B(1,3) - adj(1,3) + s(3) - f(1) =L= -1 ; (LHS = 1, INFES = 2 ****)
+     
+REMAINING 22 ENTRIES SKIPPED
+
+
+---- machine_num_lesseq  =L=  
+
+machine_num_lesseq(1,1)..  10000*A(1,1) =L= 10000 ; (LHS = 0)
+     
+machine_num_lesseq(1,2)..  10000*A(1,2) + m(1,1) + 2*m(1,2) + 3*m(1,3) - m(2,1) - 2*m(2,2) - 3*m(2,3) =L= 10000 ; (LHS = 0)
+     
+machine_num_lesseq(1,3)..  10000*A(1,3) + m(1,1) + 2*m(1,2) + 3*m(1,3) - m(3,1) - 2*m(3,2) - 3*m(3,3) =L= 10000 ; (LHS = 0)
+     
+REMAINING 22 ENTRIES SKIPPED
+
+
+---- tight_constraint_mnl  =L=  
+
+tight_constraint_mnl(1,1)..  - 10000*A(1,1) =L= -1 ; (LHS = 0, INFES = 1 ****)
+     
+tight_constraint_mnl(1,2)..  - 10000*A(1,2) - m(1,1) - 2*m(1,2) - 3*m(1,3) + m(2,1) + 2*m(2,2) + 3*m(2,3) =L= -1 ; (LHS = 0, INFES = 1 ****)
+     
+tight_constraint_mnl(1,3)..  - 10000*A(1,3) - m(1,1) - 2*m(1,2) - 3*m(1,3) + m(3,1) + 2*m(3,2) + 3*m(3,3) =L= -1 ; (LHS = 0, INFES = 1 ****)
+     
+REMAINING 22 ENTRIES SKIPPED
+
+
+---- overlap  =L=  
+
+overlap(1,1)..  20000*A(1,1) - 2*B(1,1) =L= 20000 ; (LHS = 0)
+     
+overlap(1,2)..  10000*A(1,2) + 10000*A(2,1) - B(1,2) - B(2,1) =L= 19999 ; (LHS = 0)
+     
+overlap(1,3)..  10000*A(1,3) + 10000*A(3,1) - B(1,3) - B(3,1) =L= 19999 ; (LHS = 0)
+     
+REMAINING 22 ENTRIES SKIPPED
+
+
+---- finish_before_start_and_same_mac  =L=  
+
+finish_before_start_and_same_mac(1,1)..  2*A(1,1) + B(1,1) - 10000*Z(1,1) =L= 2 ; (LHS = 0)
+     
+finish_before_start_and_same_mac(1,2)..  A(1,2) + A(2,1) + B(1,2) - 10000*Z(1,2) =L= 2 ; (LHS = 0)
+     
+finish_before_start_and_same_mac(1,3)..  A(1,3) + A(3,1) + B(1,3) - 10000*Z(1,3) =L= 2 ; (LHS = 0)
+     
+REMAINING 22 ENTRIES SKIPPED
+
+
+---- tc_fbssm  =L=  
+
+tc_fbssm(1,1)..  - 2*A(1,1) - B(1,1) + 10000*Z(1,1) =L= 9997 ; (LHS = 0)
+     
+tc_fbssm(1,2)..  - A(1,2) - A(2,1) - B(1,2) + 10000*Z(1,2) =L= 9997 ; (LHS = 0)
+     
+tc_fbssm(1,3)..  - A(1,3) - A(3,1) - B(1,3) + 10000*Z(1,3) =L= 9997 ; (LHS = 0)
+     
+REMAINING 22 ENTRIES SKIPPED
+
+
+---- n_following_orders  =E=  
+
+n_following_orders(1)..  - Z(1,2) - Z(1,3) - Z(1,4) - Z(1,5) + C(1) =E= 0 ; (LHS = 0)
+     
+n_following_orders(2)..  - Z(2,1) - Z(2,3) - Z(2,4) - Z(2,5) + C(2) =E= 0 ; (LHS = 0)
+     
+n_following_orders(3)..  - Z(3,1) - Z(3,2) - Z(3,4) - Z(3,5) + C(3) =E= 0 ; (LHS = 0)
+     
+REMAINING 2 ENTRIES SKIPPED
+
+
+---- setY  =L=  
+
+setY(1,1)..  - 10000*Y(1,1) =L= 0 ; (LHS = 0)
+     
+setY(1,2)..  - 10000*Y(1,2) + C(1) - C(2) =L= 0 ; (LHS = 0)
+     
+setY(1,3)..  - 10000*Y(1,3) + C(1) - C(3) =L= 0 ; (LHS = 0)
+     
+REMAINING 22 ENTRIES SKIPPED
+
+
+---- tc_setY  =L=  
+
+tc_setY(1,1)..  10000*Y(1,1) =L= 9999 ; (LHS = 0)
+     
+tc_setY(1,2)..  10000*Y(1,2) - C(1) + C(2) =L= 9999 ; (LHS = 0)
+     
+tc_setY(1,3)..  10000*Y(1,3) - C(1) + C(3) =L= 9999 ; (LHS = 0)
+     
+REMAINING 22 ENTRIES SKIPPED
+
+
+---- setYp  =L=  
+
+setYp(1,1)..  - 10000*Yp(1,1) =L= -2 ; (LHS = 0, INFES = 2 ****)
+     
+setYp(1,2)..  - 10000*Yp(1,2) - C(1) + C(2) =L= -2 ; (LHS = 0, INFES = 2 ****)
+     
+setYp(1,3)..  - 10000*Yp(1,3) - C(1) + C(3) =L= -2 ; (LHS = 0, INFES = 2 ****)
+     
+REMAINING 22 ENTRIES SKIPPED
+
+
+---- tc_setYp  =L=  
+
+tc_setYp(1,1)..  10000*Yp(1,1) =L= 10001 ; (LHS = 0)
+     
+tc_setYp(1,2)..  10000*Yp(1,2) + C(1) - C(2) =L= 10001 ; (LHS = 0)
+     
+tc_setYp(1,3)..  10000*Yp(1,3) + C(1) - C(3) =L= 10001 ; (LHS = 0)
+     
+REMAINING 22 ENTRIES SKIPPED
+
+
+---- adj_nextorder_same_mac  =L=  
+
+adj_nextorder_same_mac(1,1)..  2*A(1,1) + Y(1,1) + Yp(1,1) - 10000*adj(1,1) =L= 3 ; (LHS = 0)
+     
+adj_nextorder_same_mac(1,2)..  A(1,2) + A(2,1) + Y(1,2) + Yp(1,2) - 10000*adj(1,2) =L= 3 ; (LHS = 0)
+     
+adj_nextorder_same_mac(1,3)..  A(1,3) + A(3,1) + Y(1,3) + Yp(1,3) - 10000*adj(1,3) =L= 3 ; (LHS = 0)
+     
+REMAINING 22 ENTRIES SKIPPED
+
+
+---- tc_nosm  =L=  
+
+tc_nosm(1,1)..  - 2*A(1,1) - Y(1,1) - Yp(1,1) + 10000*adj(1,1) =L= 9996 ; (LHS = 0)
+     
+tc_nosm(1,2)..  - A(1,2) - A(2,1) - Y(1,2) - Yp(1,2) + 10000*adj(1,2) =L= 9996 ; (LHS = 0)
+     
+tc_nosm(1,3)..  - A(1,3) - A(3,1) - Y(1,3) - Yp(1,3) + 10000*adj(1,3) =L= 9996 ; (LHS = 0)
+     
+REMAINING 22 ENTRIES SKIPPED
+
+
+---- select_latest  =E=  
+
+select_latest..  Xf(1) + Xf(2) + Xf(3) + Xf(4) + Xf(5) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- select_earliest  =E=  
+
+select_earliest..  Xs(1) + Xs(2) + Xs(3) + Xs(4) + Xs(5) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- confirm_lf  =G=  
+
+confirm_lf(1)..  - f(1) + lf =G= 0 ; (LHS = 0)
+     
+confirm_lf(2)..  - f(2) + lf =G= 0 ; (LHS = 0)
+     
+confirm_lf(3)..  - f(3) + lf =G= 0 ; (LHS = 0)
+     
+REMAINING 2 ENTRIES SKIPPED
+
+
+---- set_lf  =L=  
+
+set_lf(1)..  10000*Xf(1) - f(1) + lf =L= 10000 ; (LHS = 0)
+     
+set_lf(2)..  10000*Xf(2) - f(2) + lf =L= 10000 ; (LHS = 0)
+     
+set_lf(3)..  10000*Xf(3) - f(3) + lf =L= 10000 ; (LHS = 0)
+     
+REMAINING 2 ENTRIES SKIPPED
+
+
+---- confirm_es  =L=  
+
+confirm_es(1)..  - s(1) + es =L= 0 ; (LHS = -1)
+     
+confirm_es(2)..  - s(2) + es =L= 0 ; (LHS = -1)
+     
+confirm_es(3)..  - s(3) + es =L= 0 ; (LHS = -1)
+     
+REMAINING 2 ENTRIES SKIPPED
+
+
+---- set_es  =G=  
+
+set_es(1)..  - 10000*Xs(1) - s(1) + es =G= -10000 ; (LHS = -1)
+     
+set_es(2)..  - 10000*Xs(2) - s(2) + es =G= -10000 ; (LHS = -1)
+     
+set_es(3)..  - 10000*Xs(3) - s(3) + es =G= -10000 ; (LHS = -1)
+     
+REMAINING 2 ENTRIES SKIPPED
+
+GAMS 40.1.1  23eb37fb Aug 16, 2022          WEX-WEI x86 64bit/MS Windows - 12/02/22 20:48:56 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE jssp Using MIP From line 179
+
+
+---- A  order i occurs on a machine with number less than or equal to that of ip
+
+A(1,1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+    10000       machine_num_lesseq(1,1)
+   -10000       tight_constraint_mnl(1,1)
+    20000       overlap(1,1)
+        2       finish_before_start_and_same_mac(1,1)
+       -2       tc_fbssm(1,1)
+        2       adj_nextorder_same_mac(1,1)
+       -2       tc_nosm(1,1)
+
+A(1,2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+    10000       machine_num_lesseq(1,2)
+   -10000       tight_constraint_mnl(1,2)
+    10000       overlap(1,2)
+    10000       overlap(2,1)
+        1       finish_before_start_and_same_mac(1,2)
+        1       finish_before_start_and_same_mac(2,1)
+       -1       tc_fbssm(1,2)
+       -1       tc_fbssm(2,1)
+        1       adj_nextorder_same_mac(1,2)
+        1       adj_nextorder_same_mac(2,1)
+       -1       tc_nosm(1,2)
+       -1       tc_nosm(2,1)
+
+A(1,3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+    10000       machine_num_lesseq(1,3)
+   -10000       tight_constraint_mnl(1,3)
+    10000       overlap(1,3)
+    10000       overlap(3,1)
+        1       finish_before_start_and_same_mac(1,3)
+        1       finish_before_start_and_same_mac(3,1)
+       -1       tc_fbssm(1,3)
+       -1       tc_fbssm(3,1)
+        1       adj_nextorder_same_mac(1,3)
+        1       adj_nextorder_same_mac(3,1)
+       -1       tc_nosm(1,3)
+       -1       tc_nosm(3,1)
+
+REMAINING 22 ENTRIES SKIPPED
+
+---- B  order i finishes before or at start time of ip with setup time required if i is processed before ip in between
+
+B(1,1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+    10000       finish_before_start(1,1)
+   -10000       tight_constraint_fbs(1,1)
+       -2       overlap(1,1)
+        1       finish_before_start_and_same_mac(1,1)
+       -1       tc_fbssm(1,1)
+
+B(1,2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+    10000       finish_before_start(1,2)
+   -10000       tight_constraint_fbs(1,2)
+       -1       overlap(1,2)
+       -1       overlap(2,1)
+        1       finish_before_start_and_same_mac(1,2)
+       -1       tc_fbssm(1,2)
+
+B(1,3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+    10000       finish_before_start(1,3)
+   -10000       tight_constraint_fbs(1,3)
+       -1       overlap(1,3)
+       -1       overlap(3,1)
+        1       finish_before_start_and_same_mac(1,3)
+       -1       tc_fbssm(1,3)
+
+REMAINING 22 ENTRIES SKIPPED
+
+---- Z  order i and ip on same machine and i finishes at or before ip
+
+Z(1,1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+   -10000       finish_before_start_and_same_mac(1,1)
+    10000       tc_fbssm(1,1)
+
+Z(1,2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+   -10000       finish_before_start_and_same_mac(1,2)
+    10000       tc_fbssm(1,2)
+       -1       n_following_orders(1)
+
+Z(1,3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+   -10000       finish_before_start_and_same_mac(1,3)
+    10000       tc_fbssm(1,3)
+       -1       n_following_orders(1)
+
+REMAINING 22 ENTRIES SKIPPED
+
+---- Y  no of orders after i on m_i - no of orders after ip on m_ip >= 1
+
+Y(1,1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+   -10000       setY(1,1)
+    10000       tc_setY(1,1)
+        1       adj_nextorder_same_mac(1,1)
+       -1       tc_nosm(1,1)
+
+Y(1,2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+   -10000       setY(1,2)
+    10000       tc_setY(1,2)
+        1       adj_nextorder_same_mac(1,2)
+       -1       tc_nosm(1,2)
+
+Y(1,3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+   -10000       setY(1,3)
+    10000       tc_setY(1,3)
+        1       adj_nextorder_same_mac(1,3)
+       -1       tc_nosm(1,3)
+
+REMAINING 22 ENTRIES SKIPPED
+
+---- Yp  no of orders after i on m_i - no of orders after ip on m_ip <= 1
+
+Yp(1,1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+   -10000       setYp(1,1)
+    10000       tc_setYp(1,1)
+        1       adj_nextorder_same_mac(1,1)
+       -1       tc_nosm(1,1)
+
+Yp(1,2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+   -10000       setYp(1,2)
+    10000       tc_setYp(1,2)
+        1       adj_nextorder_same_mac(1,2)
+       -1       tc_nosm(1,2)
+
+Yp(1,3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+   -10000       setYp(1,3)
+    10000       tc_setYp(1,3)
+        1       adj_nextorder_same_mac(1,3)
+       -1       tc_nosm(1,3)
+
+REMAINING 22 ENTRIES SKIPPED
+
+---- adj  order ip is the order next after i on the same machine
+
+adj(1,1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       finish_before_start(1,1)
+       -1       tight_constraint_fbs(1,1)
+   -10000       adj_nextorder_same_mac(1,1)
+    10000       tc_nosm(1,1)
+
+adj(1,2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       finish_before_start(1,2)
+       -1       tight_constraint_fbs(1,2)
+   -10000       adj_nextorder_same_mac(1,2)
+    10000       tc_nosm(1,2)
+
+adj(1,3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       finish_before_start(1,3)
+       -1       tight_constraint_fbs(1,3)
+   -10000       adj_nextorder_same_mac(1,3)
+    10000       tc_nosm(1,3)
+
+REMAINING 22 ENTRIES SKIPPED
+
+---- m  order i occurs on machine j
+
+m(1,1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       cost_obj
+       -2       ptime_obj
+       -2       finish_time(1)
+        1       mac_con(1)
+        1       machine_num_lesseq(1,2)
+        1       machine_num_lesseq(1,3)
+        1       machine_num_lesseq(1,4)
+        1       machine_num_lesseq(1,5)
+       -1       machine_num_lesseq(2,1)
+       -1       machine_num_lesseq(3,1)
+       -1       machine_num_lesseq(4,1)
+       -1       machine_num_lesseq(5,1)
+       -1       tight_constraint_mnl(1,2)
+       -1       tight_constraint_mnl(1,3)
+       -1       tight_constraint_mnl(1,4)
+       -1       tight_constraint_mnl(1,5)
+        1       tight_constraint_mnl(2,1)
+        1       tight_constraint_mnl(3,1)
+        1       tight_constraint_mnl(4,1)
+        1       tight_constraint_mnl(5,1)
+
+m(1,2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -2       cost_obj
+       -2       ptime_obj
+       -2       finish_time(1)
+        1       mac_con(1)
+        2       machine_num_lesseq(1,2)
+        2       machine_num_lesseq(1,3)
+        2       machine_num_lesseq(1,4)
+        2       machine_num_lesseq(1,5)
+       -2       machine_num_lesseq(2,1)
+       -2       machine_num_lesseq(3,1)
+       -2       machine_num_lesseq(4,1)
+       -2       machine_num_lesseq(5,1)
+       -2       tight_constraint_mnl(1,2)
+       -2       tight_constraint_mnl(1,3)
+       -2       tight_constraint_mnl(1,4)
+       -2       tight_constraint_mnl(1,5)
+        2       tight_constraint_mnl(2,1)
+        2       tight_constraint_mnl(3,1)
+        2       tight_constraint_mnl(4,1)
+        2       tight_constraint_mnl(5,1)
+
+m(1,3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -3       cost_obj
+       -3       ptime_obj
+       -3       finish_time(1)
+        1       mac_con(1)
+        3       machine_num_lesseq(1,2)
+        3       machine_num_lesseq(1,3)
+        3       machine_num_lesseq(1,4)
+        3       machine_num_lesseq(1,5)
+       -3       machine_num_lesseq(2,1)
+       -3       machine_num_lesseq(3,1)
+       -3       machine_num_lesseq(4,1)
+       -3       machine_num_lesseq(5,1)
+       -3       tight_constraint_mnl(1,2)
+       -3       tight_constraint_mnl(1,3)
+       -3       tight_constraint_mnl(1,4)
+       -3       tight_constraint_mnl(1,5)
+        3       tight_constraint_mnl(2,1)
+        3       tight_constraint_mnl(3,1)
+        3       tight_constraint_mnl(4,1)
+        3       tight_constraint_mnl(5,1)
+
+REMAINING 12 ENTRIES SKIPPED
+
+---- Xf  Xf(i) = 1 if order i has largest finish time
+
+Xf(1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       select_latest
+    10000       set_lf(1)
+
+Xf(2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       select_latest
+    10000       set_lf(2)
+
+Xf(3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       select_latest
+    10000       set_lf(3)
+
+REMAINING 2 ENTRIES SKIPPED
+
+---- Xs  Xs(i) = 1 if order i has smallest start time
+
+Xs(1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       select_earliest
+   -10000       set_es(1)
+
+Xs(2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       select_earliest
+   -10000       set_es(2)
+
+Xs(3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+        1       select_earliest
+   -10000       set_es(3)
+
+REMAINING 2 ENTRIES SKIPPED
+
+---- s  start time of order i
+
+s(1)
+                (.LO, .L, .UP, .M = 1, 1, 3, 0)
+       -1       finish_time(1)
+       -1       finish_before_start(1,1)
+       -1       finish_before_start(2,1)
+       -1       finish_before_start(3,1)
+       -1       finish_before_start(4,1)
+       -1       finish_before_start(5,1)
+        1       tight_constraint_fbs(1,1)
+        1       tight_constraint_fbs(2,1)
+        1       tight_constraint_fbs(3,1)
+        1       tight_constraint_fbs(4,1)
+        1       tight_constraint_fbs(5,1)
+       -1       confirm_es(1)
+       -1       set_es(1)
+        0       (OLD LEVEL ****)
+
+s(2)
+                (.LO, .L, .UP, .M = 1, 1, 4, 0)
+       -1       finish_time(2)
+       -1       finish_before_start(1,2)
+       -1       finish_before_start(2,2)
+       -1       finish_before_start(3,2)
+       -1       finish_before_start(4,2)
+       -1       finish_before_start(5,2)
+        1       tight_constraint_fbs(1,2)
+        1       tight_constraint_fbs(2,2)
+        1       tight_constraint_fbs(3,2)
+        1       tight_constraint_fbs(4,2)
+        1       tight_constraint_fbs(5,2)
+       -1       confirm_es(2)
+       -1       set_es(2)
+        0       (OLD LEVEL ****)
+
+s(3)
+                (.LO, .L, .UP, .M = 1, 1, 4, 0)
+       -1       finish_time(3)
+       -1       finish_before_start(1,3)
+       -1       finish_before_start(2,3)
+       -1       finish_before_start(3,3)
+       -1       finish_before_start(4,3)
+       -1       finish_before_start(5,3)
+        1       tight_constraint_fbs(1,3)
+        1       tight_constraint_fbs(2,3)
+        1       tight_constraint_fbs(3,3)
+        1       tight_constraint_fbs(4,3)
+        1       tight_constraint_fbs(5,3)
+       -1       confirm_es(3)
+       -1       set_es(3)
+        0       (OLD LEVEL ****)
+
+REMAINING 2 ENTRIES SKIPPED
+
+---- f  finish time of order i
+
+f(1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       finish_time(1)
+        1       process_end(1)
+        1       finish_before_start(1,1)
+        1       finish_before_start(1,2)
+        1       finish_before_start(1,3)
+        1       finish_before_start(1,4)
+        1       finish_before_start(1,5)
+       -1       tight_constraint_fbs(1,1)
+       -1       tight_constraint_fbs(1,2)
+       -1       tight_constraint_fbs(1,3)
+       -1       tight_constraint_fbs(1,4)
+       -1       tight_constraint_fbs(1,5)
+       -1       confirm_lf(1)
+       -1       set_lf(1)
+
+f(2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       finish_time(2)
+        1       process_end(2)
+        1       finish_before_start(2,1)
+        1       finish_before_start(2,2)
+        1       finish_before_start(2,3)
+        1       finish_before_start(2,4)
+        1       finish_before_start(2,5)
+       -1       tight_constraint_fbs(2,1)
+       -1       tight_constraint_fbs(2,2)
+       -1       tight_constraint_fbs(2,3)
+       -1       tight_constraint_fbs(2,4)
+       -1       tight_constraint_fbs(2,5)
+       -1       confirm_lf(2)
+       -1       set_lf(2)
+
+f(3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       finish_time(3)
+        1       process_end(3)
+        1       finish_before_start(3,1)
+        1       finish_before_start(3,2)
+        1       finish_before_start(3,3)
+        1       finish_before_start(3,4)
+        1       finish_before_start(3,5)
+       -1       tight_constraint_fbs(3,1)
+       -1       tight_constraint_fbs(3,2)
+       -1       tight_constraint_fbs(3,3)
+       -1       tight_constraint_fbs(3,4)
+       -1       tight_constraint_fbs(3,5)
+       -1       confirm_lf(3)
+       -1       set_lf(3)
+
+REMAINING 2 ENTRIES SKIPPED
+
+---- C  number of orders scheduled after order i on the same machine
+
+C(1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       n_following_orders(1)
+        1       setY(1,2)
+        1       setY(1,3)
+        1       setY(1,4)
+        1       setY(1,5)
+       -1       setY(2,1)
+       -1       setY(3,1)
+       -1       setY(4,1)
+       -1       setY(5,1)
+       -1       tc_setY(1,2)
+       -1       tc_setY(1,3)
+       -1       tc_setY(1,4)
+       -1       tc_setY(1,5)
+        1       tc_setY(2,1)
+        1       tc_setY(3,1)
+        1       tc_setY(4,1)
+        1       tc_setY(5,1)
+       -1       setYp(1,2)
+       -1       setYp(1,3)
+       -1       setYp(1,4)
+       -1       setYp(1,5)
+        1       setYp(2,1)
+        1       setYp(3,1)
+        1       setYp(4,1)
+        1       setYp(5,1)
+        1       tc_setYp(1,2)
+        1       tc_setYp(1,3)
+        1       tc_setYp(1,4)
+        1       tc_setYp(1,5)
+       -1       tc_setYp(2,1)
+       -1       tc_setYp(3,1)
+       -1       tc_setYp(4,1)
+       -1       tc_setYp(5,1)
+
+C(2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       n_following_orders(2)
+       -1       setY(1,2)
+        1       setY(2,1)
+        1       setY(2,3)
+        1       setY(2,4)
+        1       setY(2,5)
+       -1       setY(3,2)
+       -1       setY(4,2)
+       -1       setY(5,2)
+        1       tc_setY(1,2)
+       -1       tc_setY(2,1)
+       -1       tc_setY(2,3)
+       -1       tc_setY(2,4)
+       -1       tc_setY(2,5)
+        1       tc_setY(3,2)
+        1       tc_setY(4,2)
+        1       tc_setY(5,2)
+        1       setYp(1,2)
+       -1       setYp(2,1)
+       -1       setYp(2,3)
+       -1       setYp(2,4)
+       -1       setYp(2,5)
+        1       setYp(3,2)
+        1       setYp(4,2)
+        1       setYp(5,2)
+       -1       tc_setYp(1,2)
+        1       tc_setYp(2,1)
+        1       tc_setYp(2,3)
+        1       tc_setYp(2,4)
+        1       tc_setYp(2,5)
+       -1       tc_setYp(3,2)
+       -1       tc_setYp(4,2)
+       -1       tc_setYp(5,2)
+
+C(3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       n_following_orders(3)
+       -1       setY(1,3)
+       -1       setY(2,3)
+        1       setY(3,1)
+        1       setY(3,2)
+        1       setY(3,4)
+        1       setY(3,5)
+       -1       setY(4,3)
+       -1       setY(5,3)
+        1       tc_setY(1,3)
+        1       tc_setY(2,3)
+       -1       tc_setY(3,1)
+       -1       tc_setY(3,2)
+       -1       tc_setY(3,4)
+       -1       tc_setY(3,5)
+        1       tc_setY(4,3)
+        1       tc_setY(5,3)
+        1       setYp(1,3)
+        1       setYp(2,3)
+       -1       setYp(3,1)
+       -1       setYp(3,2)
+       -1       setYp(3,4)
+       -1       setYp(3,5)
+        1       setYp(4,3)
+        1       setYp(5,3)
+       -1       tc_setYp(1,3)
+       -1       tc_setYp(2,3)
+        1       tc_setYp(3,1)
+        1       tc_setYp(3,2)
+        1       tc_setYp(3,4)
+        1       tc_setYp(3,5)
+       -1       tc_setYp(4,3)
+       -1       tc_setYp(5,3)
+
+REMAINING 2 ENTRIES SKIPPED
+
+---- lf  largest finish time
+
+lf
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -1       makespan_obj
+        1       confirm_lf(1)
+        1       confirm_lf(2)
+        1       confirm_lf(3)
+        1       confirm_lf(4)
+        1       confirm_lf(5)
+        1       set_lf(1)
+        1       set_lf(2)
+        1       set_lf(3)
+        1       set_lf(4)
+        1       set_lf(5)
+
+
+---- es  earliest start time
+
+es
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+        1       makespan_obj
+        1       confirm_es(1)
+        1       confirm_es(2)
+        1       confirm_es(3)
+        1       confirm_es(4)
+        1       confirm_es(5)
+        1       set_es(1)
+        1       set_es(2)
+        1       set_es(3)
+        1       set_es(4)
+        1       set_es(5)
+
+
+---- p_cost  processing cost
+
+p_cost
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       cost_obj
+
+
+---- makespan  
+
+makespan
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       makespan_obj
+
+
+---- p_time  processing time
+
+p_time
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       ptime_obj
+
+GAMS 40.1.1  23eb37fb Aug 16, 2022          WEX-WEI x86 64bit/MS Windows - 12/02/22 20:48:56 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Range Statistics    SOLVE jssp Using MIP From line 179
+
+
+RANGE STATISTICS (ABSOLUTE NON-ZERO FINITE VALUES)
+
+RHS       [min, max] : [ 1.000E+00, 2.000E+04] - Zero values observed as well
+Bound     [min, max] : [ 1.000E+00, 1.200E+02] - Zero values observed as well
+Matrix    [min, max] : [ 1.000E+00, 2.000E+04]
+
+GAMS 40.1.1  23eb37fb Aug 16, 2022          WEX-WEI x86 64bit/MS Windows - 12/02/22 20:48:56 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE jssp Using MIP From line 179
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS          26     SINGLE EQUATIONS          370
+BLOCKS OF VARIABLES          17     SINGLE VARIABLES          195  5 projected
+NON ZERO ELEMENTS         1,435     DISCRETE VARIABLES        192
+
+
+GENERATION TIME      =        0.234 SECONDS      4 MB  40.1.1 23eb37fb WEX-WEI
+GAMS 40.1.1  23eb37fb Aug 16, 2022          WEX-WEI x86 64bit/MS Windows - 12/02/22 20:48:56 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE jssp Using MIP From line 179
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   jssp                OBJECTIVE  p_cost
+     TYPE    MIP                 DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  179
+
+**** SOLVER STATUS     1 Normal Completion
+**** MODEL STATUS      1 Optimal
+**** OBJECTIVE VALUE                8.0000
+
+ RESOURCE USAGE, LIMIT          1.406 10000000000.000
+ ITERATION COUNT, LIMIT        92    2147483647
+--- *** This solver runs with a demo license. No commercial use.
+--- GMO setup time: 0.00s
+--- Space for names approximately 0.01 Mb
+--- Use option 'names no' to turn use of names off
+--- GMO memory 0.56 Mb (peak 0.57 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.0.0 link memory 0.01 Mb (peak 0.04 Mb)
+--- Starting Cplex
+
+
+--- MIP status (101): integer optimal solution.
+--- Cplex Time: 0.02sec (det. 8.08 ticks)
+
+--- Fixing integer variables and solving final LP...
+
+
+--- Fixed MIP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.28 ticks)
+
+
+Proven optimal solution
+MIP Solution:            8.000000    (92 iterations, 0 nodes)
+Final Solve:             8.000000    (0 iterations)
+
+Best possible:           8.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU cost_obj            .              .              .             1.0000      
+---- EQU ptime_obj           .              .              .             EPS         
+---- EQU makespan_~          .              .              .             EPS         
+
+---- EQU finish_time  
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1          .              .              .              .          
+2          .              .              .              .          
+3          .              .              .              .          
+4          .              .              .              .          
+5          .              .              .              .          
+
+---- EQU mac_con  
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1         1.0000         1.0000         1.0000          .          
+2         1.0000         1.0000         1.0000          .          
+3         1.0000         1.0000         1.0000          .          
+4         1.0000         1.0000         1.0000          .          
+5         1.0000         1.0000         1.0000          .          
+
+---- EQU process_end  
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1        -INF            3.0000         3.0000          .          
+2        -INF            3.0000         4.0000          .          
+3        -INF            4.0000         4.0000          .          
+4        -INF           31.0000        90.0000          .          
+5        -INF           61.0000       120.0000          .          
+
+---- EQU finish_before_start  
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.1        -INF            2.0000     10000.0000          .          
+1.2        -INF            2.0000     10000.0000          .          
+1.3        -INF            2.0000     10000.0000          .          
+1.4        -INF         9974.0000     10000.0000          .          
+1.5        -INF         9943.0000     10000.0000          .          
+2.1        -INF            2.0000     10000.0000          .          
+2.2        -INF            2.0000     10000.0000          .          
+2.3        -INF            2.0000     10000.0000          .          
+2.4        -INF         9973.0000     10000.0000          .          
+2.5        -INF         9943.0000     10000.0000          .          
+3.1        -INF            3.0000     10000.0000          .          
+3.2        -INF            3.0000     10000.0000          .          
+3.3        -INF            3.0000     10000.0000          .          
+3.4        -INF         9974.0000     10000.0000          .          
+3.5        -INF         9944.0000     10000.0000          .          
+4.1        -INF           30.0000     10000.0000          .          
+4.2        -INF           30.0000     10000.0000          .          
+4.3        -INF           30.0000     10000.0000          .          
+4.4        -INF            1.0000     10000.0000          .          
+4.5        -INF         9972.0000     10000.0000          .          
+5.1        -INF           60.0000     10000.0000          .          
+5.2        -INF           60.0000     10000.0000          .          
+5.3        -INF           60.0000     10000.0000          .          
+5.4        -INF           31.0000     10000.0000          .          
+5.5        -INF            1.0000     10000.0000          .          
+
+---- EQU tight_constraint_fbs  
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.1        -INF           -2.0000        -1.0000          .          
+1.2        -INF           -2.0000        -1.0000          .          
+1.3        -INF           -2.0000        -1.0000          .          
+1.4        -INF        -9974.0000        -1.0000          .          
+1.5        -INF        -9943.0000        -1.0000          .          
+2.1        -INF           -2.0000        -1.0000          .          
+2.2        -INF           -2.0000        -1.0000          .          
+2.3        -INF           -2.0000        -1.0000          .          
+2.4        -INF        -9973.0000        -1.0000          .          
+2.5        -INF        -9943.0000        -1.0000          .          
+3.1        -INF           -3.0000        -1.0000          .          
+3.2        -INF           -3.0000        -1.0000          .          
+3.3        -INF           -3.0000        -1.0000          .          
+3.4        -INF        -9974.0000        -1.0000          .          
+3.5        -INF        -9944.0000        -1.0000          .          
+4.1        -INF          -30.0000        -1.0000          .          
+4.2        -INF          -30.0000        -1.0000          .          
+4.3        -INF          -30.0000        -1.0000          .          
+4.4        -INF           -1.0000        -1.0000          .          
+4.5        -INF        -9972.0000        -1.0000          .          
+5.1        -INF          -60.0000        -1.0000          .          
+5.2        -INF          -60.0000        -1.0000          .          
+5.3        -INF          -60.0000        -1.0000          .          
+5.4        -INF          -31.0000        -1.0000          .          
+5.5        -INF           -1.0000        -1.0000          .          
+
+---- EQU machine_num_lesseq  
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.1        -INF        10000.0000     10000.0000          .          
+1.2        -INF         9999.0000     10000.0000          .          
+1.3        -INF         9998.0000     10000.0000          .          
+1.4        -INF        10000.0000     10000.0000          .          
+1.5        -INF        10000.0000     10000.0000          .          
+2.1        -INF            1.0000     10000.0000          .          
+2.2        -INF        10000.0000     10000.0000          .          
+2.3        -INF         9999.0000     10000.0000          .          
+2.4        -INF            1.0000     10000.0000          .          
+2.5        -INF            1.0000     10000.0000          .          
+3.1        -INF            2.0000     10000.0000          .          
+3.2        -INF            1.0000     10000.0000          .          
+3.3        -INF        10000.0000     10000.0000          .          
+3.4        -INF            2.0000     10000.0000          .          
+3.5        -INF            2.0000     10000.0000          .          
+4.1        -INF        10000.0000     10000.0000          .          
+4.2        -INF         9999.0000     10000.0000          .          
+4.3        -INF         9998.0000     10000.0000          .          
+4.4        -INF        10000.0000     10000.0000          .          
+4.5        -INF        10000.0000     10000.0000          .          
+5.1        -INF        10000.0000     10000.0000          .          
+5.2        -INF         9999.0000     10000.0000          .          
+5.3        -INF         9998.0000     10000.0000          .          
+5.4        -INF        10000.0000     10000.0000          .          
+5.5        -INF        10000.0000     10000.0000          .          
+
+---- EQU tight_constraint_mnl  
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.1        -INF       -10000.0000        -1.0000          .          
+1.2        -INF        -9999.0000        -1.0000          .          
+1.3        -INF        -9998.0000        -1.0000          .          
+1.4        -INF       -10000.0000        -1.0000          .          
+1.5        -INF       -10000.0000        -1.0000          .          
+2.1        -INF           -1.0000        -1.0000          .          
+2.2        -INF       -10000.0000        -1.0000          .          
+2.3        -INF        -9999.0000        -1.0000          .          
+2.4        -INF           -1.0000        -1.0000          .          
+2.5        -INF           -1.0000        -1.0000          .          
+3.1        -INF           -2.0000        -1.0000          .          
+3.2        -INF           -1.0000        -1.0000          .          
+3.3        -INF       -10000.0000        -1.0000          .          
+3.4        -INF           -2.0000        -1.0000          .          
+3.5        -INF           -2.0000        -1.0000          .          
+4.1        -INF       -10000.0000        -1.0000          .          
+4.2        -INF        -9999.0000        -1.0000          .          
+4.3        -INF        -9998.0000        -1.0000          .          
+4.4        -INF       -10000.0000        -1.0000          .          
+4.5        -INF       -10000.0000        -1.0000          .          
+5.1        -INF       -10000.0000        -1.0000          .          
+5.2        -INF        -9999.0000        -1.0000          .          
+5.3        -INF        -9998.0000        -1.0000          .          
+5.4        -INF       -10000.0000        -1.0000          .          
+5.5        -INF       -10000.0000        -1.0000          .          
+
+---- EQU overlap  
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.1        -INF        20000.0000     20000.0000          .          
+1.2        -INF        10000.0000     19999.0000          .          
+1.3        -INF        10000.0000     19999.0000          .          
+1.4        -INF        19999.0000     19999.0000          .          
+1.5        -INF        19999.0000     19999.0000          .          
+2.1        -INF        10000.0000     19999.0000          .          
+2.2        -INF        20000.0000     20000.0000          .          
+2.3        -INF        10000.0000     19999.0000          .          
+2.4        -INF         9999.0000     19999.0000          .          
+2.5        -INF         9999.0000     19999.0000          .          
+3.1        -INF        10000.0000     19999.0000          .          
+3.2        -INF        10000.0000     19999.0000          .          
+3.3        -INF        20000.0000     20000.0000          .          
+3.4        -INF         9999.0000     19999.0000          .          
+3.5        -INF         9999.0000     19999.0000          .          
+4.1        -INF        19999.0000     19999.0000          .          
+4.2        -INF         9999.0000     19999.0000          .          
+4.3        -INF         9999.0000     19999.0000          .          
+4.4        -INF        20000.0000     20000.0000          .          
+4.5        -INF        19999.0000     19999.0000          .          
+5.1        -INF        19999.0000     19999.0000          .          
+5.2        -INF         9999.0000     19999.0000          .          
+5.3        -INF         9999.0000     19999.0000          .          
+5.4        -INF        19999.0000     19999.0000          .          
+5.5        -INF        20000.0000     20000.0000          .          
+
+---- EQU finish_before_start_and_same_mac  
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.1        -INF            2.0000         2.0000          .          
+1.2        -INF            1.0000         2.0000          .          
+1.3        -INF            1.0000         2.0000          .          
+1.4        -INF        -9997.0000         2.0000          .          
+1.5        -INF        -9997.0000         2.0000          .          
+2.1        -INF            1.0000         2.0000          .          
+2.2        -INF            2.0000         2.0000          .          
+2.3        -INF            1.0000         2.0000          .          
+2.4        -INF            2.0000         2.0000          .          
+2.5        -INF            2.0000         2.0000          .          
+3.1        -INF            1.0000         2.0000          .          
+3.2        -INF            1.0000         2.0000          .          
+3.3        -INF            2.0000         2.0000          .          
+3.4        -INF            2.0000         2.0000          .          
+3.5        -INF            2.0000         2.0000          .          
+4.1        -INF            2.0000         2.0000          .          
+4.2        -INF            1.0000         2.0000          .          
+4.3        -INF            1.0000         2.0000          .          
+4.4        -INF            2.0000         2.0000          .          
+4.5        -INF        -9997.0000         2.0000          .          
+5.1        -INF            2.0000         2.0000          .          
+5.2        -INF            1.0000         2.0000          .          
+5.3        -INF            1.0000         2.0000          .          
+5.4        -INF            2.0000         2.0000          .          
+5.5        -INF            2.0000         2.0000          .          
+
+---- EQU tc_fbssm  
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.1        -INF           -2.0000      9997.0000          .          
+1.2        -INF           -1.0000      9997.0000          .          
+1.3        -INF           -1.0000      9997.0000          .          
+1.4        -INF         9997.0000      9997.0000          .          
+1.5        -INF         9997.0000      9997.0000          .          
+2.1        -INF           -1.0000      9997.0000          .          
+2.2        -INF           -2.0000      9997.0000          .          
+2.3        -INF           -1.0000      9997.0000          .          
+2.4        -INF           -2.0000      9997.0000          .          
+2.5        -INF           -2.0000      9997.0000          .          
+3.1        -INF           -1.0000      9997.0000          .          
+3.2        -INF           -1.0000      9997.0000          .          
+3.3        -INF           -2.0000      9997.0000          .          
+3.4        -INF           -2.0000      9997.0000          .          
+3.5        -INF           -2.0000      9997.0000          .          
+4.1        -INF           -2.0000      9997.0000          .          
+4.2        -INF           -1.0000      9997.0000          .          
+4.3        -INF           -1.0000      9997.0000          .          
+4.4        -INF           -2.0000      9997.0000          .          
+4.5        -INF         9997.0000      9997.0000          .          
+5.1        -INF           -2.0000      9997.0000          .          
+5.2        -INF           -1.0000      9997.0000          .          
+5.3        -INF           -1.0000      9997.0000          .          
+5.4        -INF           -2.0000      9997.0000          .          
+5.5        -INF           -2.0000      9997.0000          .          
+
+---- EQU n_following_orders  
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1          .              .              .              .          
+2          .              .              .              .          
+3          .              .              .              .          
+4          .              .              .              .          
+5          .              .              .              .          
+
+---- EQU setY  
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.1        -INF             .              .              .          
+1.2        -INF        -9998.0000          .              .          
+1.3        -INF        -9998.0000          .              .          
+1.4        -INF        -9999.0000          .              .          
+1.5        -INF        -9998.0000          .              .          
+2.1        -INF           -2.0000          .              .          
+2.2        -INF             .              .              .          
+2.3        -INF             .              .              .          
+2.4        -INF           -1.0000          .              .          
+2.5        -INF             .              .              .          
+3.1        -INF           -2.0000          .              .          
+3.2        -INF             .              .              .          
+3.3        -INF             .              .              .          
+3.4        -INF           -1.0000          .              .          
+3.5        -INF             .              .              .          
+4.1        -INF           -1.0000          .              .          
+4.2        -INF        -9999.0000          .              .          
+4.3        -INF        -9999.0000          .              .          
+4.4        -INF             .              .              .          
+4.5        -INF        -9999.0000          .              .          
+5.1        -INF           -2.0000          .              .          
+5.2        -INF             .              .              .          
+5.3        -INF             .              .              .          
+5.4        -INF           -1.0000          .              .          
+5.5        -INF             .              .              .          
+
+---- EQU tc_setY  
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.1        -INF             .          9999.0000          .          
+1.2        -INF         9998.0000      9999.0000          .          
+1.3        -INF         9998.0000      9999.0000          .          
+1.4        -INF         9999.0000      9999.0000          .          
+1.5        -INF         9998.0000      9999.0000          .          
+2.1        -INF            2.0000      9999.0000          .          
+2.2        -INF             .          9999.0000          .          
+2.3        -INF             .          9999.0000          .          
+2.4        -INF            1.0000      9999.0000          .          
+2.5        -INF             .          9999.0000          .          
+3.1        -INF            2.0000      9999.0000          .          
+3.2        -INF             .          9999.0000          .          
+3.3        -INF             .          9999.0000          .          
+3.4        -INF            1.0000      9999.0000          .          
+3.5        -INF             .          9999.0000          .          
+4.1        -INF            1.0000      9999.0000          .          
+4.2        -INF         9999.0000      9999.0000          .          
+4.3        -INF         9999.0000      9999.0000          .          
+4.4        -INF             .          9999.0000          .          
+4.5        -INF         9999.0000      9999.0000          .          
+5.1        -INF            2.0000      9999.0000          .          
+5.2        -INF             .          9999.0000          .          
+5.3        -INF             .          9999.0000          .          
+5.4        -INF            1.0000      9999.0000          .          
+5.5        -INF             .          9999.0000          .          
+
+---- EQU setYp  
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.1        -INF       -10000.0000        -2.0000          .          
+1.2        -INF           -2.0000        -2.0000          .          
+1.3        -INF           -2.0000        -2.0000          .          
+1.4        -INF       -10001.0000        -2.0000          .          
+1.5        -INF           -2.0000        -2.0000          .          
+2.1        -INF        -9998.0000        -2.0000          .          
+2.2        -INF       -10000.0000        -2.0000          .          
+2.3        -INF       -10000.0000        -2.0000          .          
+2.4        -INF        -9999.0000        -2.0000          .          
+2.5        -INF       -10000.0000        -2.0000          .          
+3.1        -INF        -9998.0000        -2.0000          .          
+3.2        -INF       -10000.0000        -2.0000          .          
+3.3        -INF       -10000.0000        -2.0000          .          
+3.4        -INF        -9999.0000        -2.0000          .          
+3.5        -INF       -10000.0000        -2.0000          .          
+4.1        -INF        -9999.0000        -2.0000          .          
+4.2        -INF       -10001.0000        -2.0000          .          
+4.3        -INF       -10001.0000        -2.0000          .          
+4.4        -INF       -10000.0000        -2.0000          .          
+4.5        -INF       -10001.0000        -2.0000          .          
+5.1        -INF        -9998.0000        -2.0000          .          
+5.2        -INF       -10000.0000        -2.0000          .          
+5.3        -INF       -10000.0000        -2.0000          .          
+5.4        -INF        -9999.0000        -2.0000          .          
+5.5        -INF       -10000.0000        -2.0000          .          
+
+---- EQU tc_setYp  
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.1        -INF        10000.0000     10001.0000          .          
+1.2        -INF            2.0000     10001.0000          .          
+1.3        -INF            2.0000     10001.0000          .          
+1.4        -INF        10001.0000     10001.0000          .          
+1.5        -INF            2.0000     10001.0000          .          
+2.1        -INF         9998.0000     10001.0000          .          
+2.2        -INF        10000.0000     10001.0000          .          
+2.3        -INF        10000.0000     10001.0000          .          
+2.4        -INF         9999.0000     10001.0000          .          
+2.5        -INF        10000.0000     10001.0000          .          
+3.1        -INF         9998.0000     10001.0000          .          
+3.2        -INF        10000.0000     10001.0000          .          
+3.3        -INF        10000.0000     10001.0000          .          
+3.4        -INF         9999.0000     10001.0000          .          
+3.5        -INF        10000.0000     10001.0000          .          
+4.1        -INF         9999.0000     10001.0000          .          
+4.2        -INF        10001.0000     10001.0000          .          
+4.3        -INF        10001.0000     10001.0000          .          
+4.4        -INF        10000.0000     10001.0000          .          
+4.5        -INF        10001.0000     10001.0000          .          
+5.1        -INF         9998.0000     10001.0000          .          
+5.2        -INF        10000.0000     10001.0000          .          
+5.3        -INF        10000.0000     10001.0000          .          
+5.4        -INF         9999.0000     10001.0000          .          
+5.5        -INF        10000.0000     10001.0000          .          
+
+---- EQU adj_nextorder_same_mac  
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.1        -INF            3.0000         3.0000          .          
+1.2        -INF            2.0000         3.0000          .          
+1.3        -INF            2.0000         3.0000          .          
+1.4        -INF        -9996.0000         3.0000          .          
+1.5        -INF            3.0000         3.0000          .          
+2.1        -INF            2.0000         3.0000          .          
+2.2        -INF            3.0000         3.0000          .          
+2.3        -INF            2.0000         3.0000          .          
+2.4        -INF            2.0000         3.0000          .          
+2.5        -INF            2.0000         3.0000          .          
+3.1        -INF            2.0000         3.0000          .          
+3.2        -INF            2.0000         3.0000          .          
+3.3        -INF            3.0000         3.0000          .          
+3.4        -INF            2.0000         3.0000          .          
+3.5        -INF            2.0000         3.0000          .          
+4.1        -INF            3.0000         3.0000          .          
+4.2        -INF            3.0000         3.0000          .          
+4.3        -INF            3.0000         3.0000          .          
+4.4        -INF            3.0000         3.0000          .          
+4.5        -INF        -9996.0000         3.0000          .          
+5.1        -INF            3.0000         3.0000          .          
+5.2        -INF            2.0000         3.0000          .          
+5.3        -INF            2.0000         3.0000          .          
+5.4        -INF            3.0000         3.0000          .          
+5.5        -INF            3.0000         3.0000          .          
+
+---- EQU tc_nosm  
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.1        -INF           -3.0000      9996.0000          .          
+1.2        -INF           -2.0000      9996.0000          .          
+1.3        -INF           -2.0000      9996.0000          .          
+1.4        -INF         9996.0000      9996.0000          .          
+1.5        -INF           -3.0000      9996.0000          .          
+2.1        -INF           -2.0000      9996.0000          .          
+2.2        -INF           -3.0000      9996.0000          .          
+2.3        -INF           -2.0000      9996.0000          .          
+2.4        -INF           -2.0000      9996.0000          .          
+2.5        -INF           -2.0000      9996.0000          .          
+3.1        -INF           -2.0000      9996.0000          .          
+3.2        -INF           -2.0000      9996.0000          .          
+3.3        -INF           -3.0000      9996.0000          .          
+3.4        -INF           -2.0000      9996.0000          .          
+3.5        -INF           -2.0000      9996.0000          .          
+4.1        -INF           -3.0000      9996.0000          .          
+4.2        -INF           -3.0000      9996.0000          .          
+4.3        -INF           -3.0000      9996.0000          .          
+4.4        -INF           -3.0000      9996.0000          .          
+4.5        -INF         9996.0000      9996.0000          .          
+5.1        -INF           -3.0000      9996.0000          .          
+5.2        -INF           -2.0000      9996.0000          .          
+5.3        -INF           -2.0000      9996.0000          .          
+5.4        -INF           -3.0000      9996.0000          .          
+5.5        -INF           -3.0000      9996.0000          .          
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU select_la~         1.0000         1.0000         1.0000          .          
+---- EQU select_ea~         1.0000         1.0000         1.0000          .          
+
+---- EQU confirm_lf  
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1          .            58.0000        +INF             .          
+2          .            58.0000        +INF             .          
+3          .            57.0000        +INF             .          
+4          .            30.0000        +INF             .          
+5          .              .            +INF             .          
+
+---- EQU set_lf  
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1        -INF           58.0000     10000.0000          .          
+2        -INF           58.0000     10000.0000          .          
+3        -INF           57.0000     10000.0000          .          
+4        -INF           30.0000     10000.0000          .          
+5        -INF        10000.0000     10000.0000          .          
+
+---- EQU confirm_es  
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1        -INF             .              .              .          
+2        -INF             .              .              .          
+3        -INF             .              .              .          
+4        -INF          -29.0000          .              .          
+5        -INF          -59.0000          .              .          
+
+---- EQU set_es  
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1    -10000.0000    -10000.0000        +INF             .          
+2    -10000.0000          .            +INF             .          
+3    -10000.0000          .            +INF             .          
+4    -10000.0000       -29.0000        +INF             .          
+5    -10000.0000       -59.0000        +INF             .          
+
+---- VAR A  order i occurs on a machine with number less than or equal to that of ip
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.1          .             1.0000         1.0000         EPS         
+1.2          .             1.0000         1.0000         EPS         
+1.3          .             1.0000         1.0000         EPS         
+1.4          .             1.0000         1.0000         EPS         
+1.5          .             1.0000         1.0000         EPS         
+2.1          .              .             1.0000         EPS         
+2.2          .             1.0000         1.0000         EPS         
+2.3          .             1.0000         1.0000         EPS         
+2.4          .              .             1.0000         EPS         
+2.5          .              .             1.0000         EPS         
+3.1          .              .             1.0000         EPS         
+3.2          .              .             1.0000         EPS         
+3.3          .             1.0000         1.0000         EPS         
+3.4          .              .             1.0000         EPS         
+3.5          .              .             1.0000         EPS         
+4.1          .             1.0000         1.0000         EPS         
+4.2          .             1.0000         1.0000         EPS         
+4.3          .             1.0000         1.0000         EPS         
+4.4          .             1.0000         1.0000         EPS         
+4.5          .             1.0000         1.0000         EPS         
+5.1          .             1.0000         1.0000         EPS         
+5.2          .             1.0000         1.0000         EPS         
+5.3          .             1.0000         1.0000         EPS         
+5.4          .             1.0000         1.0000         EPS         
+5.5          .             1.0000         1.0000         EPS         
+
+---- VAR B  order i finishes before or at start time of ip with setup time required if i is processed before ip in between
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.1          .              .             1.0000         EPS         
+1.2          .              .             1.0000         EPS         
+1.3          .              .             1.0000         EPS         
+1.4          .             1.0000         1.0000         EPS         
+1.5          .             1.0000         1.0000         EPS         
+2.1          .              .             1.0000         EPS         
+2.2          .              .             1.0000         EPS         
+2.3          .              .             1.0000         EPS         
+2.4          .             1.0000         1.0000         EPS         
+2.5          .             1.0000         1.0000         EPS         
+3.1          .              .             1.0000         EPS         
+3.2          .              .             1.0000         EPS         
+3.3          .              .             1.0000         EPS         
+3.4          .             1.0000         1.0000         EPS         
+3.5          .             1.0000         1.0000         EPS         
+4.1          .              .             1.0000         EPS         
+4.2          .              .             1.0000         EPS         
+4.3          .              .             1.0000         EPS         
+4.4          .              .             1.0000         EPS         
+4.5          .             1.0000         1.0000         EPS         
+5.1          .              .             1.0000         EPS         
+5.2          .              .             1.0000         EPS         
+5.3          .              .             1.0000         EPS         
+5.4          .              .             1.0000         EPS         
+5.5          .              .             1.0000         EPS         
+
+---- VAR Z  order i and ip on same machine and i finishes at or before ip
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.1          .              .             1.0000         EPS         
+1.2          .              .             1.0000         EPS         
+1.3          .              .             1.0000         EPS         
+1.4          .             1.0000         1.0000         EPS         
+1.5          .             1.0000         1.0000         EPS         
+2.1          .              .             1.0000         EPS         
+2.2          .              .             1.0000         EPS         
+2.3          .              .             1.0000         EPS         
+2.4          .              .             1.0000         EPS         
+2.5          .              .             1.0000         EPS         
+3.1          .              .             1.0000         EPS         
+3.2          .              .             1.0000         EPS         
+3.3          .              .             1.0000         EPS         
+3.4          .              .             1.0000         EPS         
+3.5          .              .             1.0000         EPS         
+4.1          .              .             1.0000         EPS         
+4.2          .              .             1.0000         EPS         
+4.3          .              .             1.0000         EPS         
+4.4          .              .             1.0000         EPS         
+4.5          .             1.0000         1.0000         EPS         
+5.1          .              .             1.0000         EPS         
+5.2          .              .             1.0000         EPS         
+5.3          .              .             1.0000         EPS         
+5.4          .              .             1.0000         EPS         
+5.5          .              .             1.0000         EPS         
+
+---- VAR Y  no of orders after i on m_i - no of orders after ip on m_ip >= 1
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.1          .              .             1.0000         EPS         
+1.2          .             1.0000         1.0000         EPS         
+1.3          .             1.0000         1.0000         EPS         
+1.4          .             1.0000         1.0000         EPS         
+1.5          .             1.0000         1.0000         EPS         
+2.1          .              .             1.0000         EPS         
+2.2          .              .             1.0000         EPS         
+2.3          .              .             1.0000         EPS         
+2.4          .              .             1.0000         EPS         
+2.5          .              .             1.0000         EPS         
+3.1          .              .             1.0000         EPS         
+3.2          .              .             1.0000         EPS         
+3.3          .              .             1.0000         EPS         
+3.4          .              .             1.0000         EPS         
+3.5          .              .             1.0000         EPS         
+4.1          .              .             1.0000         EPS         
+4.2          .             1.0000         1.0000         EPS         
+4.3          .             1.0000         1.0000         EPS         
+4.4          .              .             1.0000         EPS         
+4.5          .             1.0000         1.0000         EPS         
+5.1          .              .             1.0000         EPS         
+5.2          .              .             1.0000         EPS         
+5.3          .              .             1.0000         EPS         
+5.4          .              .             1.0000         EPS         
+5.5          .              .             1.0000         EPS         
+
+---- VAR Yp  no of orders after i on m_i - no of orders after ip on m_ip <= 1
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.1          .             1.0000         1.0000         EPS         
+1.2          .              .             1.0000         EPS         
+1.3          .              .             1.0000         EPS         
+1.4          .             1.0000         1.0000         EPS         
+1.5          .              .             1.0000         EPS         
+2.1          .             1.0000         1.0000         EPS         
+2.2          .             1.0000         1.0000         EPS         
+2.3          .             1.0000         1.0000         EPS         
+2.4          .             1.0000         1.0000         EPS         
+2.5          .             1.0000         1.0000         EPS         
+3.1          .             1.0000         1.0000         EPS         
+3.2          .             1.0000         1.0000         EPS         
+3.3          .             1.0000         1.0000         EPS         
+3.4          .             1.0000         1.0000         EPS         
+3.5          .             1.0000         1.0000         EPS         
+4.1          .             1.0000         1.0000         EPS         
+4.2          .             1.0000         1.0000         EPS         
+4.3          .             1.0000         1.0000         EPS         
+4.4          .             1.0000         1.0000         EPS         
+4.5          .             1.0000         1.0000         EPS         
+5.1          .             1.0000         1.0000         EPS         
+5.2          .             1.0000         1.0000         EPS         
+5.3          .             1.0000         1.0000         EPS         
+5.4          .             1.0000         1.0000         EPS         
+5.5          .             1.0000         1.0000         EPS         
+
+---- VAR adj  order ip is the order next after i on the same machine
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.1          .              .             1.0000         EPS         
+1.2          .              .             1.0000         EPS         
+1.3          .              .             1.0000         EPS         
+1.4          .             1.0000         1.0000         EPS         
+1.5          .              .             1.0000         EPS         
+2.1          .              .             1.0000         EPS         
+2.2          .              .             1.0000         EPS         
+2.3          .              .             1.0000         EPS         
+2.4          .              .             1.0000         EPS         
+2.5          .              .             1.0000         EPS         
+3.1          .              .             1.0000         EPS         
+3.2          .              .             1.0000         EPS         
+3.3          .              .             1.0000         EPS         
+3.4          .              .             1.0000         EPS         
+3.5          .              .             1.0000         EPS         
+4.1          .              .             1.0000         EPS         
+4.2          .              .             1.0000         EPS         
+4.3          .              .             1.0000         EPS         
+4.4          .              .             1.0000         EPS         
+4.5          .             1.0000         1.0000         EPS         
+5.1          .              .             1.0000         EPS         
+5.2          .              .             1.0000         EPS         
+5.3          .              .             1.0000         EPS         
+5.4          .              .             1.0000         EPS         
+5.5          .              .             1.0000         EPS         
+
+---- VAR m  order i occurs on machine j
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+1.1          .             1.0000         1.0000         1.0000      
+1.2          .              .             1.0000         2.0000      
+1.3          .              .             1.0000         3.0000      
+2.1          .              .             1.0000         1.0000      
+2.2          .             1.0000         1.0000         2.0000      
+2.3          .              .             1.0000         3.0000      
+3.1          .              .             1.0000         1.0000      
+3.2          .              .             1.0000         2.0000      
+3.3          .             1.0000         1.0000         3.0000      
+4.1          .             1.0000         1.0000         1.0000      
+4.2          .              .             1.0000         2.0000      
+4.3          .              .             1.0000         3.0000      
+5.1          .             1.0000         1.0000         1.0000      
+5.2          .              .             1.0000         2.0000      
+5.3          .              .             1.0000         3.0000      
+
+---- VAR Xf  Xf(i) = 1 if order i has largest finish time
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1          .              .             1.0000         EPS         
+2          .              .             1.0000         EPS         
+3          .              .             1.0000         EPS         
+4          .              .             1.0000         EPS         
+5          .             1.0000         1.0000         EPS         
+
+---- VAR Xs  Xs(i) = 1 if order i has smallest start time
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1          .             1.0000         1.0000         EPS         
+2          .              .             1.0000         EPS         
+3          .              .             1.0000         EPS         
+4          .              .             1.0000         EPS         
+5          .              .             1.0000         EPS         
+
+---- VAR s  start time of order i
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1         1.0000         1.0000         3.0000         EPS         
+2         1.0000         1.0000         4.0000         EPS         
+3         1.0000         1.0000         4.0000         EPS         
+4        30.0000        30.0000        90.0000         EPS         
+5        60.0000        60.0000       120.0000         EPS         
+
+---- VAR f  finish time of order i
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1          .             3.0000        +INF            EPS         
+2          .             3.0000        +INF            EPS         
+3          .             4.0000        +INF            EPS         
+4          .            31.0000        +INF            EPS         
+5          .            61.0000        +INF            EPS         
+
+---- VAR C  number of orders scheduled after order i on the same machine
+
+         LOWER          LEVEL          UPPER         MARGINAL
+
+1          .             2.0000        +INF            EPS         
+2          .              .            +INF            EPS         
+3          .              .            +INF            EPS         
+4          .             1.0000        +INF            EPS         
+5          .              .            +INF            EPS         
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR lf                  .            61.0000        +INF            EPS         
+---- VAR es                  .             1.0000        +INF            EPS         
+---- VAR p_cost            -INF            8.0000        +INF             .          
+---- VAR makespan          -INF           60.0000        +INF             .          
+---- VAR p_time            -INF            9.0000        +INF             .          
+
+  lf  largest finish time
+  es  earliest start time
+  p_cost  processing cost
+  p_time  processing time
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 40.1.1  23eb37fb Aug 16, 2022          WEX-WEI x86 64bit/MS Windows - 12/02/22 20:48:56 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----    180 VARIABLE A.L  order i occurs on a machine with number less than or equal to that of ip
+
+            1           2           3           4           5
+
+1       1.000       1.000       1.000       1.000       1.000
+2                   1.000       1.000
+3                               1.000
+4       1.000       1.000       1.000       1.000       1.000
+5       1.000       1.000       1.000       1.000       1.000
+
+
+----    180 VARIABLE B.L  order i finishes before or at start time of ip with setup time required if i is processed before ip in between
+
+            4           5
+
+1       1.000       1.000
+2       1.000       1.000
+3       1.000       1.000
+4                   1.000
+
+
+----    180 VARIABLE s.L  start time of order i
+
+1  1.000,    2  1.000,    3  1.000,    4 30.000,    5 60.000
+
+
+----    180 VARIABLE f.L  finish time of order i
+
+1  3.000,    2  3.000,    3  4.000,    4 31.000,    5 61.000
+
+
+----    180 VARIABLE m.L  order i occurs on machine j
+
+            1           2           3
+
+1       1.000
+2                   1.000
+3                               1.000
+4       1.000
+5       1.000
+
+
+----    180 VARIABLE Y.L  no of orders after i on m_i - no of orders after ip on m_ip >= 1
+
+            2           3           4           5
+
+1       1.000       1.000       1.000       1.000
+4       1.000       1.000                   1.000
+
+
+----    180 VARIABLE C.L  number of orders scheduled after order i on the same machine
+
+1 2.000,    4 1.000
+
+
+----    180 VARIABLE Yp.L  no of orders after i on m_i - no of orders after ip on m_ip <= 1
+
+            1           2           3           4           5
+
+1       1.000                               1.000
+2       1.000       1.000       1.000       1.000       1.000
+3       1.000       1.000       1.000       1.000       1.000
+4       1.000       1.000       1.000       1.000       1.000
+5       1.000       1.000       1.000       1.000       1.000
+
+
+
+EXECUTION TIME       =        1.797 SECONDS      4 MB  40.1.1 23eb37fb WEX-WEI
+
+
+USER: GAMS Demo license for Omkar Chaudhari          G220821|0002CO-GEN
+      Indian Institute of Technology, India                    DL072038
+
+
+**** FILE SUMMARY
+
+Input      D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\jssp_setup.gms
+Output     D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\jssp_setup.lst

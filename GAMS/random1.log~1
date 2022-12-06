@@ -1,0 +1,26 @@
+--- Job random.gms Start 12/01/22 02:26:19 40.1.0 93c2a77b WEX-WEI x86 64bit/MS Windows
+--- Applying:
+    C:\GAMS\40\gmsprmNT.txt
+--- GAMS Parameters defined
+    Input C:\Users\grace\Documents\Transfer\Programming_Projects\JSSP_optimization_project\GAMS\random.gms
+    PageSize 0
+    ScrDir C:\Users\grace\Documents\Transfer\Programming_Projects\JSSP_optimization_project\GAMS\225a\
+    SysDir C:\GAMS\40\
+    LogOption 3
+    ErrMsg 1
+    ErrorLog 99
+    IDE 1
+    LstTitleLeftAligned 1
+Licensee: GAMS Demo license for Akshay Khandelwal        G220912|0002CO-GEN
+          Indian Institute of Technology Guwahati, India           DL073367
+          C:\Users\grace\Documents\GAMS\gamslice.txt
+          akshay.khandelwal@iitg.ac.in, Akshay Khandelwal                  
+          Demo license for demonstration and instructional purposes only
+Processor information: 1 socket(s), 8 core(s), and 16 thread(s) available
+GAMS 40.1.0   Copyright (C) 1987-2022 GAMS Development. All rights reserved
+--- Starting compilation
+--- random.gms(13) 3 Mb
+--- Starting execution: elapsed 0:00:00.019
+--- random.gms(13) 4 Mb
+*** Status: Normal completion
+--- Job random.gms Stop 12/01/22 02:26:19 elapsed 0:00:00.021

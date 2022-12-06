@@ -1,0 +1,11 @@
+Input=D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\random.gms
+PageSize=0
+ScrDir=225l
+SysDir=D:\GAMS\40
+ScriptNext=225l\gamsnext.cmd
+LogOption=3
+ErrMsg=1
+ErrorLog=99
+IDE=1
+GDX=default
+LstTitleLeftAligned=1

@@ -1,0 +1,140 @@
+--- Job jssp_milp.gms Start 12/04/22 18:35:36 40.1.1 23eb37fb WEX-WEI x86 64bit/MS Windows
+--- Applying:
+    D:\GAMS\40\gmsprmNT.txt
+--- GAMS Parameters defined
+    Input D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\jssp_milp.gms
+    PageSize 0
+    ScrDir D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\225k\
+    SysDir D:\GAMS\40\
+    LogOption 3
+    ErrMsg 1
+    ErrorLog 99
+    IDE 1
+    GDX D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\jssp_milp.gdx
+    LstTitleLeftAligned 1
+Licensee: GAMS Demo license for Omkar Chaudhari          G220821|0002CO-GEN
+          Indian Institute of Technology, India                    DL072038
+          D:\GAMS\40\gamslice.txt
+          c.omkar@iitg.ac.in, Omkar Chaudhari                              
+          Demo license for demonstration and instructional purposes only
+Processor information: 1 socket(s), 4 core(s), and 8 thread(s) available
+GAMS 40.1.1   Copyright (C) 1987-2022 GAMS Development. All rights reserved
+--- Starting compilation
+--- jssp_milp.gms(2) 2 Mb
+--- call =xls2gms r=c5:c7 i=test_data.xlsx o=set1.inc
+--- jssp_milp.gms(3) 2 Mb
+--- . set1.inc(14) 3 Mb
+--- jssp_milp.gms(6) 3 Mb
+--- call =xls2gms r=d4:e4 s="," i=test_data.xlsx o=set2.inc
+--- jssp_milp.gms(7) 3 Mb
+--- . set2.inc(12) 3 Mb
+--- jssp_milp.gms(13) 3 Mb
+--- call =xls2gms r=h4:i6 i=test_data.xlsx o=par1.inc
+--- jssp_milp.gms(14) 3 Mb
+--- . par1.inc(14) 3 Mb
+--- jssp_milp.gms(17) 3 Mb
+--- call =xls2gms r=k4:l6 i=test_data.xlsx o=par2.inc
+--- jssp_milp.gms(18) 3 Mb
+--- . par2.inc(14) 3 Mb
+--- jssp_milp.gms(21) 3 Mb
+--- call =xls2gms r=b12:c13 i=test_data.xlsx o=par3.inc
+--- jssp_milp.gms(22) 3 Mb
+--- . par3.inc(13) 3 Mb
+--- jssp_milp.gms(27) 3 Mb
+--- call =xls2gms r=c4:e7 i=test_data.xlsx o=tab1.inc
+--- jssp_milp.gms(28) 3 Mb
+--- . tab1.inc(15) 3 Mb
+--- jssp_milp.gms(33) 3 Mb
+--- call =xls2gms r=c11:e14 i=test_data.xlsx o=tab2.inc
+--- jssp_milp.gms(34) 3 Mb
+--- . tab2.inc(15) 3 Mb
+--- jssp_milp.gms(39) 3 Mb
+--- call =xls2gms r=h11:k14 i=test_data.xlsx o=tab3.inc
+--- jssp_milp.gms(40) 3 Mb
+--- . tab3.inc(15) 3 Mb
+--- jssp_milp.gms(172) 3 Mb
+--- Starting execution: elapsed 0:00:43.866
+--- jssp_milp.gms(184) 4 Mb
+--- Generating MIP model jssp
+--- jssp_milp.gms(283) 4 Mb
+---   146 rows  80 columns  467 non-zeroes
+---   77 discrete-columns
+--- Range statistics (absolute non-zero finite values)
+--- RHS       [min, max] : [ 1.000E+00, 2.000E+04] - Zero values observed as well
+--- Bound     [min, max] : [ 1.000E+00, 2.100E+01] - Zero values observed as well
+--- Matrix    [min, max] : [ 1.000E+00, 2.000E+04]
+--- Executing CPLEX (Solvelink=2): elapsed 0:00:43.871
+
+IBM ILOG CPLEX   40.1.1 23eb37fb Aug 16, 2022          WEI x86 64bit/MS Window
+
+--- *** This solver runs with a demo license. No commercial use.
+--- GMO setup time: 0.00s
+--- GMO memory 0.53 Mb (peak 0.53 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.0.0 link memory 0.00 Mb (peak 0.01 Mb)
+--- Starting Cplex
+
+Version identifier: 22.1.0.0 | 2022-03-09 | 1a383f8ce
+CPXPARAM_Advance                                 0
+CPXPARAM_Threads                                 1
+CPXPARAM_MIP_Display                             4
+CPXPARAM_MIP_Pool_Capacity                       0
+CPXPARAM_MIP_Tolerances_AbsMIPGap                0
+Generic callback                                 0x50
+Tried aggregator 4 times.
+MIP Presolve eliminated 100 rows and 46 columns.
+MIP Presolve modified 207 coefficients.
+Aggregator did 11 substitutions.
+Reduced MIP has 34 rows, 23 columns, and 97 nonzeros.
+Reduced MIP has 15 binaries, 8 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.00 sec. (0.44 ticks)
+Found incumbent of value 26.000000 after 0.00 sec. (0.56 ticks)
+Probing fixed 15 vars, tightened 9 bounds.
+Probing time = 0.00 sec. (0.01 ticks)
+Tried aggregator 2 times.
+MIP Presolve eliminated 31 rows and 20 columns.
+Aggregator did 3 substitutions.
+All rows and columns eliminated.
+Presolve time = 0.00 sec. (0.03 ticks)
+
+Root node processing (before b&c):
+  Real time             =    0.00 sec. (0.61 ticks)
+Sequential b&c:
+  Real time             =    0.00 sec. (0.00 ticks)
+                          ------------
+Total (root+branch&cut) =    0.00 sec. (0.61 ticks)
+
+--- MIP status (101): integer optimal solution.
+--- Cplex Time: 0.00sec (det. 0.61 ticks)
+
+--- Fixing integer variables and solving final LP...
+
+Version identifier: 22.1.0.0 | 2022-03-09 | 1a383f8ce
+CPXPARAM_Advance                                 2
+CPXPARAM_Threads                                 1
+CPXPARAM_MIP_Display                             4
+CPXPARAM_MIP_Pool_Capacity                       0
+CPXPARAM_MIP_Tolerances_AbsMIPGap                0
+Tried aggregator 1 time.
+LP Presolve eliminated 145 rows and 80 columns.
+All rows and columns eliminated.
+Presolve time = 0.00 sec. (0.06 ticks)
+
+--- Fixed MIP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.11 ticks)
+
+
+Proven optimal solution
+MIP Solution:           26.000000    (0 iterations, 0 nodes)
+Final Solve:            26.000000    (0 iterations)
+
+Best possible:          26.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+--- Reading solution for model jssp
+--- Executing after solve: elapsed 0:00:43.906
+--- jssp_milp.gms(284) 4 Mb
+--- GDX File D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\jssp_milp.gdx
+*** Status: Normal completion
+--- Job jssp_milp.gms Stop 12/04/22 18:36:20 elapsed 0:00:43.907

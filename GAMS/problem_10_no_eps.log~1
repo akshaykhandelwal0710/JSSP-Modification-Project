@@ -1,0 +1,71 @@
+
+--- Job problem_10_no_eps.gms Start 12/04/22 20:43:31 40.1.1 23eb37fb WEX-WEI x86 64bit/MS Windows
+--- Applying:
+    D:\GAMS\40\gmsprmNT.txt
+--- GAMS Parameters defined
+    Input D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\problem_10_no_eps.gms
+    PageSize 0
+    ScrDir D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\225n\
+    SysDir D:\GAMS\40\
+    LogOption 3
+    ErrMsg 1
+    ErrorLog 99
+    IDE 1
+    GDX D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\problem_10_no_eps.gdx
+    LstTitleLeftAligned 1
+Licensee: GAMS Demo license for Omkar Chaudhari          G220821|0002CO-GEN
+          Indian Institute of Technology, India                    DL072038
+          D:\GAMS\40\gamslice.txt
+          c.omkar@iitg.ac.in, Omkar Chaudhari                              
+          Demo license for demonstration and instructional purposes only
+Processor information: 1 socket(s), 4 core(s), and 8 thread(s) available
+GAMS 40.1.1   Copyright (C) 1987-2022 GAMS Development. All rights reserved
+--- Starting compilation
+--- problem_10_no_eps.gms(2) 2 Mb
+--- call =xls2gms r=Sheet10!c5:c24 i=test_data.xlsx o=set1.inc
+--- problem_10_no_eps.gms(3) 2 Mb
+--- . set1.inc(31) 3 Mb
+--- problem_10_no_eps.gms(6) 3 Mb
+--- call =xls2gms r=Sheet10!d4:h4 s="," i=test_data.xlsx o=set2.inc
+--- problem_10_no_eps.gms(7) 3 Mb
+--- . set2.inc(12) 3 Mb
+--- problem_10_no_eps.gms(13) 3 Mb
+--- call =xls2gms r=Sheet10!k5:l24 i=test_data.xlsx o=par1.inc
+--- problem_10_no_eps.gms(14) 3 Mb
+--- . par1.inc(31) 3 Mb
+--- problem_10_no_eps.gms(17) 3 Mb
+--- call =xls2gms r=Sheet10!n5:o24 i=test_data.xlsx o=par2.inc
+--- problem_10_no_eps.gms(18) 3 Mb
+--- . par2.inc(31) 3 Mb
+--- problem_10_no_eps.gms(21) 3 Mb
+--- call =xls2gms r=Sheet10!b29:c33 i=test_data.xlsx o=par3.inc
+--- problem_10_no_eps.gms(22) 3 Mb
+--- . par3.inc(16) 3 Mb
+--- problem_10_no_eps.gms(27) 3 Mb
+--- call =xls2gms r=Sheet10!c4:h24 i=test_data.xlsx o=tab1.inc
+--- problem_10_no_eps.gms(28) 3 Mb
+--- . tab1.inc(32) 3 Mb
+--- problem_10_no_eps.gms(33) 3 Mb
+--- call =xls2gms r=Sheet10!c28:h48 i=test_data.xlsx o=tab2.inc
+--- problem_10_no_eps.gms(34) 3 Mb
+--- . tab2.inc(32) 3 Mb
+--- problem_10_no_eps.gms(39) 3 Mb
+--- call =xls2gms r=Sheet10!k28:ae48 i=test_data.xlsx o=tab3.inc
+--- problem_10_no_eps.gms(40) 3 Mb
+--- . tab3.inc(32) 3 Mb
+--- problem_10_no_eps.gms(173) 3 Mb
+--- Starting execution: elapsed 0:00:37.410
+--- problem_10_no_eps.gms(290) 4 Mb
+--- Generating MIP model jssp
+--- problem_10_no_eps.gms(389) 6 Mb
+---   5,365 rows  2,605 columns  25,225 non-zeroes
+---   2,602 discrete-columns
+--- Range statistics (absolute non-zero finite values)
+--- RHS       [min, max] : [ 1.000E+00, 2.000E+04] - Zero values observed as well
+--- Bound     [min, max] : [ 1.000E+00, 3.800E+01] - Zero values observed as well
+--- Matrix    [min, max] : [ 1.000E+00, 2.000E+04]
+*** The model exceeds the demo license limits for linear models of more than 2000 rows or columns
+*** Status: Terminated due to a licensing error
+***         License file: D:\GAMS\40\gamslice.txt
+***         Inspect listing file for more information.
+--- Job problem_10_no_eps.gms Stop 12/04/22 20:44:08 elapsed 0:00:37.431

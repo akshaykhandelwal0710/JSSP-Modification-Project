@@ -1,0 +1,156 @@
+--- Job jssp_setup.gms Start 12/02/22 20:48:56 40.1.1 23eb37fb WEX-WEI x86 64bit/MS Windows
+--- Applying:
+    D:\GAMS\40\gmsprmNT.txt
+--- GAMS Parameters defined
+    Input D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\jssp_setup.gms
+    PageSize 0
+    ScrDir D:\OneDrive\Documents\GitHub\JSSP_optimization_project\GAMS\225d\
+    SysDir D:\GAMS\40\
+    LogOption 3
+    ErrMsg 1
+    ErrorLog 99
+    IDE 1
+    LstTitleLeftAligned 1
+Licensee: GAMS Demo license for Omkar Chaudhari          G220821|0002CO-GEN
+          Indian Institute of Technology, India                    DL072038
+          D:\GAMS\40\gamslice.txt
+          c.omkar@iitg.ac.in, Omkar Chaudhari                              
+          Demo license for demonstration and instructional purposes only
+Processor information: 1 socket(s), 4 core(s), and 8 thread(s) available
+GAMS 40.1.1   Copyright (C) 1987-2022 GAMS Development. All rights reserved
+--- Starting compilation
+--- jssp_setup.gms(180) 3 Mb
+--- Starting execution: elapsed 0:00:00.135
+--- jssp_setup.gms(80) 4 Mb
+--- Generating MIP model jssp
+--- jssp_setup.gms(179) 4 Mb
+---   370 rows  195 columns  1,435 non-zeroes
+---   192 discrete-columns
+--- Range statistics (absolute non-zero finite values)
+--- RHS       [min, max] : [ 1.000E+00, 2.000E+04] - Zero values observed as well
+--- Bound     [min, max] : [ 1.000E+00, 1.200E+02] - Zero values observed as well
+--- Matrix    [min, max] : [ 1.000E+00, 2.000E+04]
+--- Executing CPLEX (Solvelink=2): elapsed 0:00:00.369
+
+IBM ILOG CPLEX   40.1.1 23eb37fb Aug 16, 2022          WEI x86 64bit/MS Window
+
+--- *** This solver runs with a demo license. No commercial use.
+--- GMO setup time: 0.00s
+--- Space for names approximately 0.01 Mb
+--- Use option 'names no' to turn use of names off
+--- GMO memory 0.56 Mb (peak 0.57 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.0.0 link memory 0.01 Mb (peak 0.04 Mb)
+--- Starting Cplex
+
+Version identifier: 22.1.0.0 | 2022-03-09 | 1a383f8ce
+CPXPARAM_Advance                                 0
+CPXPARAM_Threads                                 1
+CPXPARAM_MIP_Display                             4
+CPXPARAM_MIP_Pool_Capacity                       0
+CPXPARAM_MIP_Tolerances_AbsMIPGap                0
+Generic callback                                 0x50
+Tried aggregator 2 times.
+MIP Presolve eliminated 165 rows and 73 columns.
+MIP Presolve modified 711 coefficients.
+Aggregator did 7 substitutions.
+Reduced MIP has 197 rows, 115 columns, and 734 nonzeros.
+Reduced MIP has 103 binaries, 12 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.00 sec. (1.26 ticks)
+Found incumbent of value 10.000000 after 0.00 sec. (1.91 ticks)
+Probing fixed 16 vars, tightened 2 bounds.
+Probing changed sense of 1 constraints.
+Probing time = 0.00 sec. (0.42 ticks)
+Cover probing fixed 0 vars, tightened 4 bounds.
+Tried aggregator 1 time.
+MIP Presolve eliminated 26 rows and 21 columns.
+MIP Presolve modified 70 coefficients.
+Reduced MIP has 171 rows, 94 columns, and 605 nonzeros.
+Reduced MIP has 82 binaries, 12 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.00 sec. (0.74 ticks)
+Probing time = 0.00 sec. (0.26 ticks)
+Tried aggregator 1 time.
+Detecting symmetries...
+Reduced MIP has 171 rows, 94 columns, and 605 nonzeros.
+Reduced MIP has 82 binaries, 12 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.00 sec. (0.40 ticks)
+Probing time = 0.00 sec. (0.26 ticks)
+Clique table members: 443.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: none, using 1 thread.
+Tried aggregator 1 time.
+LP Presolve eliminated 10 rows and 0 columns.
+Aggregator did 10 substitutions.
+Reduced LP has 151 rows, 84 columns, and 524 nonzeros.
+Presolve time = 0.00 sec. (0.11 ticks)
+Initializing dual steep norms . . .
+
+Iteration log . . .
+Iteration:     1   Dual objective     =             4.000000
+Initializing dual steep norms . . .
+
+Iteration log . . .
+Iteration:     1   Dual objective     =             6.000000
+Root relaxation solution time = 0.00 sec. (0.45 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+*     0+    0                           10.0000        1.0000            90.00%
+Found incumbent of value 10.000000 after 0.00 sec. (5.07 ticks)
+      0     0        6.0000    16       10.0000        6.0000       26   40.00%
+*     0+    0                            8.0000        6.0000            25.00%
+Found incumbent of value 8.000000 after 0.00 sec. (5.29 ticks)
+      0     0        6.0000     8        8.0000      Cuts: 58       74   25.00%
+      0     0        6.3333    24        8.0000      Cuts: 43       92   20.83%
+      0     0        cutoff              8.0000                     92    0.00%
+Elapsed time = 0.02 sec. (8.08 ticks, tree = 0.01 MB)
+
+Clique cuts applied:  20
+Cover cuts applied:  12
+Implied bound cuts applied:  18
+Mixed integer rounding cuts applied:  1
+Zero-half cuts applied:  4
+Gomory fractional cuts applied:  4
+
+Root node processing (before b&c):
+  Real time             =    0.02 sec. (8.08 ticks)
+Sequential b&c:
+  Real time             =    0.00 sec. (0.00 ticks)
+                          ------------
+Total (root+branch&cut) =    0.02 sec. (8.08 ticks)
+
+--- MIP status (101): integer optimal solution.
+--- Cplex Time: 0.02sec (det. 8.08 ticks)
+
+--- Fixing integer variables and solving final LP...
+
+Version identifier: 22.1.0.0 | 2022-03-09 | 1a383f8ce
+CPXPARAM_Advance                                 2
+CPXPARAM_Threads                                 1
+CPXPARAM_MIP_Display                             4
+CPXPARAM_MIP_Pool_Capacity                       0
+CPXPARAM_MIP_Tolerances_AbsMIPGap                0
+Tried aggregator 1 time.
+LP Presolve eliminated 369 rows and 195 columns.
+All rows and columns eliminated.
+Presolve time = 0.00 sec. (0.15 ticks)
+
+--- Fixed MIP status (1): optimal.
+--- Cplex Time: 0.00sec (det. 0.28 ticks)
+
+
+Proven optimal solution
+MIP Solution:            8.000000    (92 iterations, 0 nodes)
+Final Solve:             8.000000    (0 iterations)
+
+Best possible:           8.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+--- Reading solution for model jssp
+--- Executing after solve: elapsed 0:00:01.942
+--- jssp_setup.gms(180) 4 Mb
+*** Status: Normal completion
+--- Job jssp_setup.gms Stop 12/02/22 20:48:57 elapsed 0:00:01.942

@@ -1,0 +1,294 @@
+
+--- Job random.gms Start 12/01/22 20:50:09 40.1.0 93c2a77b WEX-WEI x86 64bit/MS Windows
+--- Applying:
+    C:\GAMS\40\gmsprmNT.txt
+--- GAMS Parameters defined
+    Input C:\Users\grace\Documents\Transfer\Programming_Projects\JSSP_optimization_project\GAMS\random.gms
+    PageSize 0
+    ScrDir C:\Users\grace\Documents\Transfer\Programming_Projects\JSSP_optimization_project\GAMS\225b\
+    SysDir C:\GAMS\40\
+    LogOption 3
+    ErrMsg 1
+    ErrorLog 99
+    IDE 1
+    LstTitleLeftAligned 1
+Licensee: GAMS Demo license for Akshay Khandelwal        G220912|0002CO-GEN
+          Indian Institute of Technology Guwahati, India           DL073367
+          C:\Users\grace\Documents\GAMS\gamslice.txt
+          akshay.khandelwal@iitg.ac.in, Akshay Khandelwal                  
+          Demo license for demonstration and instructional purposes only
+Processor information: 1 socket(s), 8 core(s), and 16 thread(s) available
+GAMS 40.1.0   Copyright (C) 1987-2022 GAMS Development. All rights reserved
+--- Starting compilation
+--- random.gms(2) 2 Mb
+--- call =xls2gms r=Sheet2!b6:b17 i=test_data.xlsx o=set1.inc
+--- random.gms(3) 2 Mb
+--- . set1.inc(23) 3 Mb
+--- random.gms(6) 3 Mb
+--- call =xls2gms r=Sheet2!c5:e5 s="," i=test_data.xlsx o=set2.inc
+--- random.gms(7) 3 Mb
+--- . set2.inc(12) 3 Mb
+--- random.gms(13) 3 Mb
+--- call =xls2gms r=Sheet2!g6:h17 i=test_data.xlsx o=par1.inc
+--- random.gms(14) 3 Mb
+--- . par1.inc(23) 3 Mb
+--- random.gms(17) 3 Mb
+--- call =xls2gms r=Sheet2!j6:k17 i=test_data.xlsx o=par2.inc
+--- random.gms(18) 3 Mb
+--- . par2.inc(23) 3 Mb
+--- random.gms(21) 3 Mb
+--- call =xls2gms r=Sheet2!a21:b23 i=test_data.xlsx o=par3.inc
+--- random.gms(22) 3 Mb
+--- . par3.inc(14) 3 Mb
+--- random.gms(27) 3 Mb
+--- call =xls2gms r=Sheet2!b5:e17 i=test_data.xlsx o=tab1.inc
+--- random.gms(28) 3 Mb
+--- . tab1.inc(24) 3 Mb
+--- random.gms(33) 3 Mb
+--- call =xls2gms r=Sheet2!b20:e32 i=test_data.xlsx o=tab2.inc
+--- random.gms(34) 3 Mb
+--- . tab2.inc(24) 3 Mb
+--- random.gms(39) 3 Mb
+--- call =xls2gms r=Sheet2!g20:j32 i=test_data.xlsx o=tab3.inc
+--- random.gms(40) 3 Mb
+--- . tab3.inc(24) 3 Mb
+--- random.gms(308) 3 Mb
+--- Starting execution: elapsed 0:00:13.196
+--- random.gms(417) 4 Mb
+--- Generating MIP model mod_payoff
+--- random.gms(419) 5 Mb
+--- LOOPS obj = p_cost
+---   1,974 rows  966 columns  7,939 non-zeroes
+---   962 discrete-columns
+--- Range statistics (absolute non-zero finite values)
+--- RHS       [min, max] : [ 1.000E+00, 2.000E+04] - Zero values observed as well
+--- Bound     [min, max] : [ 1.000E+00, 3.900E+01] - Zero values observed as well
+--- Matrix    [min, max] : [ 1.000E+00, 2.000E+04]
+--- Executing CPLEX (Solvelink=2): elapsed 0:00:13.218
+
+IBM ILOG CPLEX   40.1.0 93c2a77b Aug 1, 2022           WEI x86 64bit/MS Window
+
+--- *** This solver runs with a demo license. No commercial use.
+--- GMO setup time: 0.00s
+--- Space for names approximately 0.07 Mb
+--- Use option 'names no' to turn use of names off
+--- GMO memory 0.83 Mb (peak 0.84 Mb)
+--- Dictionary memory 0.00 Mb
+--- Cplex 22.1.0.0 link memory 0.04 Mb (peak 0.22 Mb)
+--- Starting Cplex
+
+Version identifier: 22.1.0.0 | 2022-03-09 | 1a383f8ce
+CPXPARAM_Advance                                 0
+CPXPARAM_Threads                                 1
+CPXPARAM_MIP_Display                             4
+CPXPARAM_MIP_Pool_Capacity                       0
+CPXPARAM_MIP_Tolerances_AbsMIPGap                0
+Generic callback                                 0x50
+Tried aggregator 2 times.
+MIP Presolve eliminated 206 rows and 54 columns.
+MIP Presolve modified 5117 coefficients.
+Aggregator did 12 substitutions.
+Reduced MIP has 1755 rows, 900 columns, and 6761 nonzeros.
+Reduced MIP has 862 binaries, 38 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.02 sec. (7.49 ticks)
+Probing time = 0.00 sec. (2.64 ticks)
+Tried aggregator 1 time.
+Detecting symmetries...
+MIP Presolve modified 48 coefficients.
+Reduced MIP has 1755 rows, 900 columns, and 6761 nonzeros.
+Reduced MIP has 862 binaries, 38 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.01 sec. (4.41 ticks)
+Probing time = 0.02 sec. (2.54 ticks)
+Clique table members: 2500.
+MIP emphasis: balance optimality and feasibility.
+MIP search method: dynamic search.
+Parallel mode: none, using 1 thread.
+Tried aggregator 1 time.
+LP Presolve eliminated 144 rows and 12 columns.
+Aggregator did 132 substitutions.
+Reduced LP has 1479 rows, 756 columns, and 5393 nonzeros.
+Presolve time = 0.00 sec. (1.14 ticks)
+Initializing dual steep norms . . .
+
+Iteration log . . .
+Iteration:     1   Dual objective     =            78.000000
+Perturbation started.
+Iteration:    51   Dual objective     =            78.000000
+Iteration:   197   Dual objective     =            78.000020
+Removing perturbation.
+Initializing dual steep norms . . .
+
+Iteration log . . .
+Iteration:     1   Dual objective     =            78.000000
+Root relaxation solution time = 0.00 sec. (11.06 ticks)
+
+        Nodes                                         Cuts/
+   Node  Left     Objective  IInf  Best Integer    Best Bound    ItCnt     Gap
+
+      0     0       78.0000   136                     78.0000      280         
+      0     0       78.6136   414                   Cuts: 471      859         
+      0     0       80.0730   381                   Cuts: 538     1344         
+      0     0       80.2214   368                   Cuts: 202     1562         
+      0     0       80.2214   339                   Cuts: 110     1686         
+      0     0       80.2214   327                   Cuts: 145     1773         
+Detecting symmetries...
+      0     0       80.2574   354                   Cuts: 138     1842         
+      0     0       80.2578   344                    Cuts: 99     1897         
+      0     0       80.2578   330                    Cuts: 66     1961         
+      0     0       80.2578   319                    Cuts: 56     2014         
+      0     0       80.2578   322                    Cuts: 72     2042         
+      0     0       80.2578   311                    Cuts: 14     2048         
+      0     0       80.2578   320                   Cuts: 225     2305         
+Detecting symmetries...
+      0     2       80.2578   288                     80.2749     2305         
+Elapsed time = 1.20 sec. (956.37 ticks, tree = 0.01 MB)
+     30    28       87.7500   162                     81.7519     5459         
+     80    62       85.4937   220                     81.8639     8639         
+                                                     Cuts: 15                  
+    125   100       86.3636   145                     82.6540    12477         
+                                                      Cuts: 8                  
+    186   141       95.5000   136                     83.0000    15127         
+                                                     Cuts: 14                  
+    246   187       98.0000   130                     83.0000    18984         
+                                                     Cuts: 16                  
+    270   201       91.0345   143                     83.0000    22149         
+    291   212    infeasible                           83.0000    25684         
+    316   234       83.7904   234                     83.0000    28443         
+                                                     Cuts: 26                  
+    360   266       83.0039   254                     83.0274    32566         
+                                                     Cuts: 28                  
+    480   344       84.9614   288                     83.4593    46955         
+                                                     Cuts: 32                  
+Elapsed time = 4.86 sec. (4234.58 ticks, tree = 0.52 MB)
+*   519   371      integral     0      110.0000       83.4606    51636   24.13%
+                                                      Cuts: 9                  
+Found incumbent of value 110.000000 after 5.19 sec. (4537.22 ticks)
+    617   428       87.0000   178      110.0000       83.6159    61484   23.99%
+                                                     Cuts: 25                  
+    725   500       92.0163   190      110.0000       84.0000    76092   23.64%
+                                                     Cuts: 39                  
+    878   582       95.0000   151      110.0000       84.2679    91703   23.39%
+                                                     Cuts: 52                  
+*   888   513      integral     0      103.0000       84.2679    92197   18.19%
+Found incumbent of value 103.000000 after 8.09 sec. (7143.15 ticks)
+   1003   579       89.0097   220      103.0000       84.8762   106219   17.60%
+                                                     Cuts: 19                  
+
+Performing restart 1
+
+Repeating presolve.
+Tried aggregator 1 time.
+MIP Presolve eliminated 26 rows and 14 columns.
+Reduced MIP has 1729 rows, 886 columns, and 6679 nonzeros.
+Reduced MIP has 848 binaries, 38 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.02 sec. (5.98 ticks)
+Tried aggregator 1 time.
+Reduced MIP has 1729 rows, 886 columns, and 6679 nonzeros.
+Reduced MIP has 848 binaries, 38 generals, 0 SOSs, and 0 indicators.
+Presolve time = 0.00 sec. (4.50 ticks)
+Represolve time = 0.06 sec. (20.96 ticks)
+Tried aggregator 1 time.
+LP Presolve eliminated 82 rows and 0 columns.
+Reduced LP has 2465 rows, 886 columns, and 10477 nonzeros.
+Presolve time = 0.00 sec. (1.45 ticks)
+Initializing dual steep norms . . .
+
+Iteration log . . .
+Iteration:     1   Dual objective     =            78.000000
+Perturbation started.
+Iteration:   102   Dual objective     =            79.791045
+Iteration:   271   Dual objective     =            79.791088
+Iteration:   413   Dual objective     =            79.791121
+Iteration:   552   Dual objective     =            79.818298
+Iteration:   668   Dual objective     =            79.971149
+Iteration:   742   Dual objective     =            80.156157
+Iteration:   817   Dual objective     =            80.156170
+Iteration:   887   Dual objective     =            80.198693
+Iteration:   967   Dual objective     =            80.257895
+Removing perturbation.
+Initializing dual steep norms . . .
+
+Iteration log . . .
+Iteration:     1   Dual objective     =            80.257753
+Iteration:   105   Dual objective     =            80.257753
+   1008     0       81.2879   382      103.0000     Cuts: 295   108027   17.60%
+   1008     0       82.2132   353      103.0000     Cuts: 494   108638   17.60%
+   1008     0       82.6909   388      103.0000     Cuts: 486   109583   17.60%
+   1008     0       82.9119   383      103.0000     Cuts: 422   110264   17.60%
+   1008     0       83.0075   362      103.0000     Cuts: 412   110655   17.60%
+   1008     0       83.6085   333      103.0000     Cuts: 366   111502   17.60%
+   1008     0       83.8191   349      103.0000     Cuts: 532   112042   17.60%
+   1008     0       84.2500   335      103.0000     Cuts: 423   112376   17.60%
+   1008     0       85.1667   297      103.0000     Cuts: 430   112841   17.31%
+   1008     0       85.6000   352      103.0000     Cuts: 388   113209   16.89%
+   1008     0       85.6000   356      103.0000     Cuts: 383   113571   16.89%
+   1008     0       85.7500   322      103.0000     Cuts: 211   113954   16.75%
+   1008     0       85.7500   347      103.0000     Cuts: 532   114287   16.75%
+   1008     0       85.7500   319      103.0000     Cuts: 112   114495   16.75%
+   1008     0       85.7500   356      103.0000     Cuts: 532   114906   16.75%
+   1008     0       86.0000   310      103.0000     Cuts: 135   115182   16.50%
+   1008     0       86.0000   371      103.0000     Cuts: 532   115487   16.50%
+   1008     2       86.0000   246      103.0000       86.0000   115487   16.50%
+   1011     5       86.6667   226      103.0000       86.0000   115903   16.50%
+   1022    14       90.0000   178      103.0000       86.0000   116874   16.50%
+   1047    22       87.2500   240      103.0000       86.0000   118022   16.50%
+                                                     Cuts: 73                  
+   1053    28       87.3750   193      103.0000       86.0000   118764   16.50%
+   1072    42       88.3665   308      103.0000       86.0000   121228   16.50%
+                                                     Cuts: 66                  
+Elapsed time = 18.02 sec. (15757.98 ticks, tree = 0.15 MB)
+   1088    47       87.0000   276      103.0000       86.0000   125236   16.50%
+                                                     Cuts: 80                  
+   1096    50       89.1302   303      103.0000       86.0000   129096   16.50%
+                                                     Cuts: 32                  
+   1111    57       87.0000   230      103.0000       86.0000   132631   16.50%
+                                                     Cuts: 34                  
+   1139    75        cutoff            103.0000       86.0000   137866   16.50%
+   1165    87       86.6000   314      103.0000       86.4334   145369   16.08%
+                                                     Cuts: 71                  
+   1184    97       92.9303   244      103.0000       86.6000   153841   15.92%
+                                                     Cuts: 50                  
+*  1196    96      integral     0      102.0000       86.6667   156363   15.03%
+Found incumbent of value 102.000000 after 25.02 sec. (22301.72 ticks)
+   1216   107       97.0577   155      102.0000       86.7500   162113   14.95%
+                                                     Cuts: 81                  
+   1243   120       89.9221   269      102.0000       87.0000   171591   14.71%
+                                                     Cuts: 40                  
+   1273   134       87.8438   318      102.0000       87.0000   179176   14.71%
+                                                     Cuts: 78                  
+   1297   145       87.2500   330      102.0000       87.2500   188615   14.46%
+                                                     Cuts: 58                  
+Elapsed time = 29.44 sec. (26121.71 ticks, tree = 0.40 MB)
+   1318   158       88.9202   282      102.0000       87.2500   197784   14.46%
+                                                     Cuts: 29                  
+   1345   173       88.4089   291      102.0000       87.2500   206742   14.46%
+                                                     Cuts: 36                  
+   1366   181       91.2500   298      102.0000       87.3333   215723   14.38%
+                                                     Cuts: 41                  
+   1388   187       88.5978   332      102.0000       87.3827   225881   14.33%
+                                                     Cuts: 26                  
+   1411   194       96.0000   178      102.0000       87.5000   234807   14.22%
+                                                     Cuts: 23                  
+   1427   199       96.1558   129      102.0000       87.5000   243732   14.22%
+                                                     Cuts: 43                  
+   1453   207       89.4013   332      102.0000       87.6035   255834   14.11%
+   1483   219       90.6221   357      102.0000       87.7500   267002   13.97%
+                                                     Cuts: 39                  
+   1512   230       89.6722   266      102.0000       87.8339   278298   13.89%
+   1530   232       91.5000   239      102.0000       87.8438   290523   13.88%
+                                                     Cuts: 40                  
+Elapsed time = 41.22 sec. (36229.74 ticks, tree = 0.48 MB)
+   1559   238       91.4116   261      102.0000       88.0000   303488   13.73%
+                                                     Cuts: 11                  
+   1585   239        cutoff            102.0000       88.0000   314152   13.73%
+                                                     Cuts: 17                  
+   1606   244       88.3901   319      102.0000       88.1923   325528   13.54%
+                                                     Cuts: 51                  
+   1628   250       89.6407   344      102.0000       88.2500   334972   13.48%
+                                                     Cuts: 19                  
+   1652   259      101.0000   176      102.0000       88.2500   343935   13.48%
+                                                     Cuts: 15                  
+   1677   270       97.6938   206      102.0000       88.2714   354158   13.46%
+                                                     Cuts: 10                  
+   1705   276       89.6667   277      102.0000       88.3877   364520   13.35%
+                                                     Cuts: 37                  
